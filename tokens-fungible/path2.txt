@@ -1,0 +1,66 @@
+/home/yaroslav/tonos-cli/tonos-cli genphrase
+Succeeded.
+Seed phrase: "shift year enrich during skin surprise meat ecology foster pony into group"
+
+/home/yaroslav/tonos-cli/tonos-cli getkeypair wallet5.keys.json "shift year enrich during skin surprise meat ecology foster pony into group"
+Input arguments:
+key_file: wallet5.keys.json
+  phrase: shift year enrich during skin surprise meat ecology foster pony into group
+Succeeded.
+
+/home/yaroslav/tonos-cli/tonos-cli call 0:eaa4b8e54760d2922d6e23da188d7a2c6824ed108a7c15be5de7b97d9740253e deployWallet '{"_answer_id":"0", "workchain_id":0,"pubkey":"0", "internal_owner":"0x5a6d9db6e5c6024b3e1726c9531a2eb67e3b31e4d130f795171d740a9a0eee6f", "tokens":"10","grams":2000000000}' --sign deploy1.keys.json --abi RootTokenContract.abi
+Input arguments:
+ address: 0:eaa4b8e54760d2922d6e23da188d7a2c6824ed108a7c15be5de7b97d9740253e
+  method: deployWallet
+  params: {"_answer_id":"0", "workchain_id":0,"pubkey":"0", "internal_owner":"0x5a6d9db6e5c6024b3e1726c9531a2eb67e3b31e4d130f795171d740a9a0eee6f", "tokens":"10","grams":2000000000}
+     abi: RootTokenContract.abi
+    keys: deploy1.keys.json
+lifetime: None
+  output: None
+Connecting to https://net.ton.dev
+Generating external inbound message...
+
+MessageId: e8d4413249810ae2be8211624d1af66628e536ccb49db0ac129673bcc4435c5f
+Expire at: Tue, 26 Jan 2021 17:35:24 +0300
+Processing...
+Succeeded.
+Result: {
+  "value0": "0:805ec9a49105d56f4bafbad0211ca91b0a4ad2352571ab0df20903ec268f6b7b"
+}
+
+/home/yaroslav/tonos-cli/tonos-cli run 0:805ec9a49105d56f4bafbad0211ca91b0a4ad2352571ab0df20903ec268f6b7b getName {} --abi TONTokenWallet.abi
+/home/yaroslav/tonos-cli/tonos-cli run 0:805ec9a49105d56f4bafbad0211ca91b0a4ad2352571ab0df20903ec268f6b7b getSymbol {} --abi TONTokenWallet.abi
+/home/yaroslav/tonos-cli/tonos-cli run 0:805ec9a49105d56f4bafbad0211ca91b0a4ad2352571ab0df20903ec268f6b7b getDecimals {} --abi TONTokenWallet.abi
+/home/yaroslav/tonos-cli/tonos-cli run 0:805ec9a49105d56f4bafbad0211ca91b0a4ad2352571ab0df20903ec268f6b7b getBalance {} --abi TONTokenWallet.abi
+/home/yaroslav/tonos-cli/tonos-cli run 0:805ec9a49105d56f4bafbad0211ca91b0a4ad2352571ab0df20903ec268f6b7b getWalletKey {} --abi TONTokenWallet.abi
+/home/yaroslav/tonos-cli/tonos-cli run 0:805ec9a49105d56f4bafbad0211ca91b0a4ad2352571ab0df20903ec268f6b7b getRootAddress {} --abi TONTokenWallet.abi
+/home/yaroslav/tonos-cli/tonos-cli run 0:805ec9a49105d56f4bafbad0211ca91b0a4ad2352571ab0df20903ec268f6b7b getOwnerAddress {} --abi TONTokenWallet.abi
+
+
+/home/yaroslav/tonos-cli/tonos-cli run 0:a39e6dd8bb49579bd750cde0ddb47750e17b29d01ce1034e98a882858b086b44 getBalance {} --abi TONTokenWallet.abi
+/home/yaroslav/tonos-cli/tonos-cli run 0:a39e6dd8bb49579bd750cde0ddb47750e17b29d01ce1034e98a882858b086b44 getOwnerAddress {} --abi TONTokenWallet.abi
+
+/home/yaroslav/tonos-cli/tonos-cli call 0:eaa4b8e54760d2922d6e23da188d7a2c6824ed108a7c15be5de7b97d9740253e deployWallet '{"_answer_id":"0", "workchain_id":0,"pubkey":"0", "internal_owner":"0xcb0823af366151a5d86a823101d8bcdfdae3cc29c74ec4e0314c9214089bdaea", "tokens":"10","grams":2000000000}' --sign deploy1.keys.json --abi RootTokenContract.abi
+Input arguments:
+ address: 0:eaa4b8e54760d2922d6e23da188d7a2c6824ed108a7c15be5de7b97d9740253e
+  method: deployWallet
+  params: {"_answer_id":"0", "workchain_id":0,"pubkey":"0", "internal_owner":"0xcb0823af366151a5d86a823101d8bcdfdae3cc29c74ec4e0314c9214089bdaea", "tokens":"10","grams":2000000000}
+     abi: RootTokenContract.abi
+    keys: deploy1.keys.json
+lifetime: None
+  output: None
+Connecting to https://net.ton.dev
+Generating external inbound message...
+
+MessageId: 6162ec988e831932b9c53867f116f7894283a10d87f6ae9b8c06bdcf0a1996e5
+Expire at: Tue, 26 Jan 2021 18:26:36 +0300
+Processing...
+Succeeded.
+Result: {
+  "value0": "0:756434fdcbe77b15e0f10b1d350456708fc4cf0661ab23d024259788f032f347"
+}
+
+/home/yaroslav/tonos-cli/tonos-cli run 0:756434fdcbe77b15e0f10b1d350456708fc4cf0661ab23d024259788f032f347 getBalance {} --abi TONTokenWallet.abi
+/home/yaroslav/tonos-cli/tonos-cli run 0:756434fdcbe77b15e0f10b1d350456708fc4cf0661ab23d024259788f032f347 getOwnerAddress {} --abi TONTokenWallet.abi
+
+/home/yaroslav/TONbin/tonos-cli run 0:756434fdcbe77b15e0f10b1d350456708fc4cf0661ab23d024259788f032f347 getRootAddress {} --abi TONTokenWallet.abi

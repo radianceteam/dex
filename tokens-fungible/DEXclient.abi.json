@@ -1,0 +1,234 @@
+{
+	"ABI version": 2,
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "sendTransfer",
+			"inputs": [
+				{"name":"dest","type":"address"},
+				{"name":"value","type":"uint128"},
+				{"name":"bounce","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "connectPair",
+			"inputs": [
+				{"name":"arg0","type":"address"}
+			],
+			"outputs": [
+				{"name":"param0","type":"bool"}
+			]
+		},
+		{
+			"name": "setPair",
+			"id": "0x3",
+			"inputs": [
+				{"name":"arg0","type":"address"},
+				{"name":"arg1","type":"address"},
+				{"name":"arg2","type":"address"},
+				{"name":"arg3","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPair",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+				{"name":"arg0","type":"address"},
+				{"name":"arg1","type":"address"},
+				{"name":"arg2","type":"uint128"},
+				{"name":"arg3","type":"address"},
+				{"name":"arg4","type":"address"},
+				{"name":"arg5","type":"uint128"}
+			]
+		},
+		{
+			"name": "sendTokens",
+			"inputs": [
+				{"name":"from","type":"address"},
+				{"name":"to","type":"address"},
+				{"name":"tokens","type":"uint128"},
+				{"name":"grams","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"transmitter","type":"address"},
+				{"name":"receiver","type":"address"},
+				{"name":"body","type":"cell"}
+			]
+		},
+		{
+			"name": "sendTokens2",
+			"inputs": [
+				{"name":"from","type":"address"},
+				{"name":"to","type":"address"},
+				{"name":"tokens","type":"uint128"},
+				{"name":"grams","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"transmitter","type":"address"},
+				{"name":"receiver","type":"address"}
+			]
+		},
+		{
+			"name": "askBalanceToken",
+			"inputs": [
+				{"name":"arg0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "askBalanceAllTokens",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setBalanceToken",
+			"id": "0x4",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getWalletBalance",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+				{"name":"value1","type":"uint128"}
+			]
+		},
+		{
+			"name": "setMsgGrams",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getMsgGrams",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "setTongrams",
+			"inputs": [
+				{"name":"value0","type":"uint128"},
+				{"name":"value1","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getTongrams",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"},
+				{"name":"value1","type":"uint128"}
+			]
+		},
+		{
+			"name": "createNewEmptyWallet",
+			"inputs": [
+				{"name":"rootAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setNewEmptyWallet",
+			"id": "0x7",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "createPairWallets",
+			"inputs": [
+				{"name":"pairAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "resetPairWallets",
+			"inputs": [
+				{"name":"pairAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "recreatePairWallets",
+			"inputs": [
+				{"name":"pairAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPairWallets",
+			"inputs": [
+				{"name":"pairAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"},
+				{"name":"value1","type":"address"}
+			]
+		},
+		{
+			"name": "askPairWalletsBalance",
+			"inputs": [
+				{"name":"pairAddr","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPairWalletsBalance",
+			"inputs": [
+				{"name":"pairAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"},
+				{"name":"value1","type":"uint128"}
+			]
+		},
+		{
+			"name": "showContractAddress",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"arg0","type":"address"},
+				{"name":"arg1","type":"uint256"}
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

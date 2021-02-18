@@ -1,0 +1,84 @@
+{
+	"ABI version": 2,
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "createNewEmptyWallet",
+			"inputs": [
+				{"name":"rootAddr","type":"address"},
+				{"name":"internal_owner","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "createNewWallet",
+			"inputs": [
+				{"name":"rootAddr","type":"address"},
+				{"name":"internal_owner","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setWallet",
+			"id": "0x3",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "showWallet",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "setTongrams",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "showTongrams",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "setTongrams2",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "showTongrams2",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

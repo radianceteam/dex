@@ -1,0 +1,75 @@
+{
+	"ABI version": 2,
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "getProviderFromQueueByIndex",
+			"inputs": [
+				{"name":"index","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"value0","type":"address"}
+			]
+		},
+		{
+			"name": "getLast",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "getFirst",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "addProviderToQueue",
+			"inputs": [
+				{"name":"provider","type":"address"}
+			],
+			"outputs": [
+				{"name":"addStatus","type":"bool"}
+			]
+		},
+		{
+			"name": "deleteFirstFromQueue",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "deleteLastFromQueue",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "getAllProvidersFromQueue",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"providersArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

@@ -14,25 +14,41 @@ contract Queue {
 		return providersQueue[index];
 	}
 
-
-	function getLast() public view alwaysAccept returns (uint128, address) {
-		return providersQueue.max();
+	function getLast() public view alwaysAccept returns (uint128) {
+		optional(uint128, address) rs = providersQueue.max();
+		if (rs.hasValue()) {(uint128 number, ) = rs.get();return number;} else {return 0;}
 	}
 
-	function getFirst() public view alwaysAccept returns (uint128, address) {
-		return providersQueue.min();
+	function getFirst() public view alwaysAccept returns (uint128) {
+		optional(uint128, address) rs = providersQueue.min();
+		if (rs.hasValue()) {(uint128 number, ) = rs.get();return number;} else {return 0;}
 	}
 
-	function addProviderToQueue(uint128 index, address provider) public view alwaysAccept returns (bool) {
-		return providersQueue.add(index, provider);
+	function addProviderToQueue(address provider) public alwaysAccept returns (bool addStatus) {
+		uint128 last = getLast();
+		last ++;
+		addStatus = providersQueue.add(last, provider);
 	}
 
-	function deleteMinFromQueue(uint128 index, address provider) public view alwaysAccept returns (uint128, address) {
-		return providersQueue.delMin();
+	function deleteFirstFromQueue() public alwaysAccept returns (uint128) {
+		optional(uint128, address) rs = providersQueue.delMin();
+		if (rs.hasValue()) {(uint128 number, ) = rs.get();return number;} else {return 0;}
 	}
 
-	function deleteMaxFromQueue(uint128 index, address provider) public view alwaysAccept returns (uint128, address) {
-		return providersQueue.delMax();
+	function deleteLastFromQueue() public alwaysAccept returns (uint128) {
+		optional(uint128, address) rs = providersQueue.delMax();
+		if (rs.hasValue()) {(uint128 number, ) = rs.get();return number;} else {return 0;}
+	}
+
+	function getAllProvidersFromQueue() public view alwaysAccept returns (address[] providersArr) {
+		uint128 first = getFirst();
+		uint128 last = getLast();
+		uint128 repeatQty = (last>=first)?last-first+1:0;
+		uint128 count = first;
+		repeat(repeatQty) {
+			providersArr.push(providersQueue[count]);
+			count++;
+		}
 	}
 
 }

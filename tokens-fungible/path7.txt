@@ -7,3 +7,15 @@
 
 /home/yaroslav/tonos-cli/tonos-cli run 0:5d32e8a24b6fa79e203232579e4d90c9b97be3b250145b091144a0e6adbf0a85 getBalance {} --abi TONTokenWallet.abi
 /home/yaroslav/tonos-cli/tonos-cli run 0:1b3b07f39c92459a0f0a06091133315fc530927bc130441793872106ca1f26c3 getBalance {} --abi TONTokenWallet.abi
+
+
+/home/yaroslav/tonos-cli/tonos-cli call 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d addProviderToQueue '{"provider":"0:1f1838cfa8113290613e76d6b696ef44950c58c65a335bfbec2e9e4ff5ec2e45"}' --abi Queue.abi.json
+/home/yaroslav/tonos-cli/tonos-cli call 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d addProviderToQueue '{"provider":"0:c4d8d1558046f72990797b8151f9c584f14a2532b0bd52b8cf7e63cebe22bc1c"}' --abi Queue.abi.json
+/home/yaroslav/tonos-cli/tonos-cli call 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d addProviderToQueue '{"provider":"0:738807e7da5ae5d8352ac660163e8f2a5f4eb2a9bc154dba385ef7dddbc2eebd"}' --abi Queue.abi.json
+
+/home/yaroslav/tonos-cli/tonos-cli run 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d getAllProvidersFromQueue {} --abi Queue.abi.json
+/home/yaroslav/tonos-cli/tonos-cli run 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d getFirst {} --abi Queue.abi.json
+/home/yaroslav/tonos-cli/tonos-cli run 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d getLast {} --abi Queue.abi.json
+
+/home/yaroslav/tonos-cli/tonos-cli call 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d deleteFirstFromQueue {} --abi Queue.abi.json
+/home/yaroslav/tonos-cli/tonos-cli call 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d deleteLastFromQueue {} --abi Queue.abi.json

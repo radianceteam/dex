@@ -3,7 +3,6 @@ pragma AbiHeader expire;
 
 interface IRootTokenContract {
 	function deployEmptyWallet(uint32 _answer_id, int8 workchain_id, uint256 pubkey, uint256 internal_owner, uint128 grams) external functionID(0x0000000d) returns (address value0);
-  function deployWallet(uint32 _answer_id, int8 workchain_id, uint256 pubkey, uint256 internal_owner, uint128 tokens, uint128 grams) external functionID(0x0000000c) returns (address value0);
 }
 
 interface ITONTokenWallet {
@@ -25,10 +24,9 @@ interface IDEXpair {
 
 contract DEXclient is IDEXclient {
 
-	address client;
-
 	// Wallet structure
   struct Wallet {
+		uint128 index;
 		address root;
     uint128 balance;
   }
@@ -41,6 +39,7 @@ contract DEXclient is IDEXclient {
 
 	// Pair structure
   struct Pair {
+		uint128 index;
 		address rootA;
     address pairWalletA;
 		uint128 allowanceA;
@@ -50,7 +49,7 @@ contract DEXclient is IDEXclient {
   }
 
 	mapping(address => Pair) pairs;
-	address[] pairtKeys;
+	address[] pairKeys;
 
 	// mapping(address => Token) tokens;
 
@@ -95,14 +94,19 @@ contract DEXclient is IDEXclient {
 	}
 
 	function setPair(address arg0, address arg1, address arg2, address arg3) public alwaysAccept override functionID(0x00000003) {
-			Pair cp = pairs[msg.sender];
+		  address operator = msg.sender;
+			Pair cp = pairs[operator];
+			if (!pairs.exists(operator)){
+				pairKeys.push(operator);
+				cp.index = pairKeys.length;
+			}
 			cp.rootA = arg0;
 	    cp.pairWalletA = arg1;
 			cp.allowanceA = 0;
 			cp.rootB = arg2;
 	    cp.pairWalletB = arg3;
 			cp.allowanceB = 0;
-			pairs[msg.sender] = cp;
+			pairs[operator] = cp;
 	}
 
 	function getPair(address value0) public view alwaysAccept returns (address arg0, address arg1, uint128 arg2, address arg3, address arg4, uint128 arg5) {
@@ -113,6 +117,7 @@ contract DEXclient is IDEXclient {
 			arg3 = cp.rootB;
 			arg4 = cp.pairWalletB;
 			arg5 = cp.allowanceB;
+			if (pairs.exists(value0)){pairKeys.push(value0);}
 	}
 
 
@@ -245,12 +250,15 @@ contract DEXclient is IDEXclient {
 		address root = msg.sender;
 		address wallet = value0;
     roots[root] = wallet;
-		if (!roots.exists(root)){rootKeys.push(root);}
-		Wallet wc = wallets[wallet];
-		wc.root = root;
-		wc.balance = 0;
-		wallets[wallet] = wc;
-		walletKeys.push(wallet);
+		if (!roots.exists(root)){
+			rootKeys.push(root);
+			walletKeys.push(wallet);
+			Wallet wc = wallets[wallet];
+			wc.index = walletKeys.length;
+			wc.root = root;
+			wc.balance = 0;
+			wallets[wallet] = wc;
+		}
 	}
 
 	function createPairWallets(address pairAddr) public view checkOwnerAndAccept {
@@ -271,10 +279,10 @@ contract DEXclient is IDEXclient {
 	// 	createNewEmptyWallet(cp.rootB);
 	// }
 
-	function getPairWallets(address pairAddr) public view alwaysAccept returns (address value0, address value1){
+	function getPairWallets(address pairAddr) public view alwaysAccept returns (address wallet0, address wallet1){
     Pair cp = pairs[pairAddr];
-		value0 = roots[cp.rootA];
-		value1 = roots[cp.rootB];
+		wallet0 = roots[cp.rootA];
+		wallet1 = roots[cp.rootB];
   }
 
 	function askPairWalletsBalance(address pairAddr) public view checkOwnerAndAccept {
@@ -293,9 +301,9 @@ contract DEXclient is IDEXclient {
 
 
 
-	function showContractAddress() public pure alwaysAccept returns (address arg0, uint256 arg1){
-    arg0 = address(this);
-		arg1 = arg0.value;
+	function showContractAddress() public pure alwaysAccept returns (address dexclient, uint256 dexclientUINT256){
+    dexclient = address(this);
+		dexclientUINT256 = dexclient.value;
   }
 
 

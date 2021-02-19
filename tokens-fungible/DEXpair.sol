@@ -123,31 +123,31 @@ contract DEXpair is IDEXpair {
 	}
 
 
-	function setPair(address arg0, address arg1, address arg2, address arg3) public checkOwnerAndAccept {
-		require(!(arg0 == address(0)), 106);
-		require(!(arg1 == address(0)), 106);
-		require(!(arg2 == address(0)), 106);
-		require(!(arg3 == address(0)), 106);
-		rootA = arg0;
-		tokenA = arg1;
-		rootB = arg2;
-		tokenB = arg3;
-	}
-
-	function resetPair() public checkOwnerAndAccept {
-		rootA = address(0);
-		tokenA = address(0);
-		rootB = address(0);
-		tokenB = address(0);
-	}
-
-
-	function getPair() public view alwaysAccept returns (address arg0, address arg1, address arg2, address arg3) {
-    arg0 = rootA;
-		arg1 = tokenA;
-		arg2 = rootB;
-		arg3 = tokenB;
-	}
+	// function setPair(address arg0, address arg1, address arg2, address arg3) public checkOwnerAndAccept {
+	// 	require(!(arg0 == address(0)), 106);
+	// 	require(!(arg1 == address(0)), 106);
+	// 	require(!(arg2 == address(0)), 106);
+	// 	require(!(arg3 == address(0)), 106);
+	// 	rootA = arg0;
+	// 	tokenA = arg1;
+	// 	rootB = arg2;
+	// 	tokenB = arg3;
+	// }
+	//
+	// function resetPair() public checkOwnerAndAccept {
+	// 	rootA = address(0);
+	// 	tokenA = address(0);
+	// 	rootB = address(0);
+	// 	tokenB = address(0);
+	// }
+	//
+	//
+	// function getPair() public view alwaysAccept returns (address arg0, address arg1, address arg2, address arg3) {
+  //   arg0 = rootA;
+	// 	arg1 = tokenA;
+	// 	arg2 = rootB;
+	// 	arg3 = tokenB;
+	// }
 
 	function getBalanceTokens() public view alwaysAccept returns (uint128 balance_tokenA, uint128 balance_tokenB) {
 		balance_tokenA = balanceTokens[tokenA];

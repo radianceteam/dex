@@ -4,6 +4,7 @@ pragma AbiHeader expire;
 contract Queue {
 
 	mapping(uint128 => address) providersQueue;
+	mapping(address => uint128) queueIndexes;
 
 	modifier alwaysAccept {
 		tvm.accept();
@@ -35,9 +36,15 @@ contract Queue {
 		if (rs.hasValue()) {(uint128 number, ) = rs.get();return number;} else {return 0;}
 	}
 
-	function deleteLastFromQueue() public alwaysAccept returns (uint128) {
-		optional(uint128, address) rs = providersQueue.delMax();
-		if (rs.hasValue()) {(uint128 number, ) = rs.get();return number;} else {return 0;}
+	function takeFirstFromQueue() public alwaysAccept returns (address) {
+		optional(uint128, address) rs = providersQueue.delMin();
+		if (rs.hasValue()) {( ,address value) = rs.get();return value;} else {return address(0);}
+	}
+
+	function getProvidersQueueLength() public view alwaysAccept returns (uint128 length) {
+		uint128 first = getFirst();
+		uint128 last = getLast();
+		uint128 length = (last>=first)?last-first+1:0;
 	}
 
 	function getAllProvidersFromQueue() public view alwaysAccept returns (address[] providersArr) {

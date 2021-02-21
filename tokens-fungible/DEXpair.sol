@@ -85,18 +85,19 @@ contract DEXpair is IDEXpair {
 	receive() external {
 	}
 
-	// function sendTokens(ITONTokenWallet walletAddress, address dest, uint128 tokens, uint128 grams) external view checkOwnerAndAccept  returns(bool){
-	// 	// Call the remote contract function with parameter.
-	// 	walletAddress.transfer(dest, tokens, grams);
-	// 	return true;
-	// }
+	function createWalletId() private pure returns (uint256) {
+		rnd.shuffle();
+		return rnd.getSeed();
+	}
 
 	function createDepositWallet(address rootAddr) public view checkOwnerAndAccept  returns (bool createStatus) {
+
 		createStatus = false;
+		uint256 walletId = createWalletId();
 		address creator = rootAddr;
 		address owner = address(this);
 		uint256 ownerUINT = owner.value;
-		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, 1000000000);
+		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, walletId, ownerUINT, 1000000000);
 		creator.transfer({value:2000000000, bounce:false, body:body});
 		createStatus = true;
 	}

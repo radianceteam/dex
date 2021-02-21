@@ -34,10 +34,9 @@ contract DEXgastracker is IDEXclient {
 		walletsArr = rootWallets[root];
 	}
 
-	function createNewEmptyWallet(address root) public view alwaysAccept  returns (bool createStatus) {
+	function createNewEmptyWallet(address root, address owner) public view alwaysAccept  returns (bool createStatus) {
 		createStatus = false;
 		address creator = root;
-		address owner = address(this);
 		uint256 ownerUINT = owner.value;
 		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, tongrams1);
 		creator.transfer({value:tongrams2, bounce:false, body:body});

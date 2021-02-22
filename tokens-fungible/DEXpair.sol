@@ -12,12 +12,20 @@ interface ITONTokenWallet {
 
 interface IDEXclient {
 	  function setPair(address arg0, address arg1, address arg2, address arg3) external functionID(0x00000003);
-		function setBalanceToken(uint128 value0) external functionID(0x00000004);
+		function setWalletBalance(uint128 value0) external functionID(0x00000004);
+		function setPairDepositA(address arg0) external functionID(0x00000008);
+		function setPairDepositB(address arg0) external functionID(0x00000009);
+
 }
 
 interface IDEXpair {
 	  function connectPair() external functionID(0x00000005);
-		function setBalanceToken(uint128 value0) external functionID(0x00000006);
+		function setNewEmptyWallet(address value0) external functionID(0x00000007);
+		function setPairDepositA(address arg0) external functionID(0x00000008);
+		function setPairDepositB(address arg0) external functionID(0x00000009);
+
+
+
 }
 
 contract DEXpair is IDEXpair {
@@ -26,13 +34,14 @@ contract DEXpair is IDEXpair {
 	address rootB;
 	address walletA;
 	address walletB;
+	mapping(address => uint128) balanceWallets;
 
+	// uint128 balanceA;
+	// uint128 balanceB;
 	// address writerA;
 	// address writerB;
 	// mapping(address => bool) writerTokens;
 	// mapping(address => uint128) balanceTokens;
-	// uint128 balanceA;
-	// uint128 balanceB;
 	uint128 reserveA;
 	uint128 reserveB;
 	mapping(address => uint128) clientStorageA;
@@ -43,6 +52,7 @@ contract DEXpair is IDEXpair {
 
 	// Client structure
   struct Client {
+		uint128 index;
 		address walletA;
     address walletB;
   }
@@ -90,32 +100,64 @@ contract DEXpair is IDEXpair {
 		return rnd.getSeed();
 	}
 
-	function createDepositWallet(address rootAddr) public view checkOwnerAndAccept  returns (bool createStatus) {
-
+	function createDepositWallet(address rootAddr) private returns (bool createStatus) {
 		createStatus = false;
 		uint256 walletId = createWalletId();
 		address creator = rootAddr;
 		address owner = address(this);
 		uint256 ownerUINT = owner.value;
-		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, walletId, ownerUINT, 1000000000);
+		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000a, 0, walletId, ownerUINT, 1000000000);
 		creator.transfer({value:2000000000, bounce:false, body:body});
 		createStatus = true;
 	}
 
 	function connectPair() public alwaysAccept override functionID(0x00000005) {
 		address dexclient = msg.sender;
+		Client cc = dexpairclients[dexclient];
 		if (!dexpairclients.exists(dexclient)){
 			addDEXclientToQueueA(dexclient);
 			addDEXclientToQueueB(dexclient);
 			createDepositWallet(rootA);
 			createDepositWallet(rootB);
       dexpairclientKeys.push(dexclient);
-
+			cc.index = dexpairclientKeys.length;
+			cc.walletA = address(0);
+			cc.walletB = address(0);
+      dexpairclients[dexclient] = cc;
+			TvmCell body = tvm.encodeBody(IDEXclient(dexclient).setPair, rootA, walletA, address(0), rootB, walletB, address(0));
+			dexclient.transfer({value:20000000, body:body});
+		} else if (cc.walletA == address(0) && cc.walletB == address(0)) {
+			addDEXclientToQueueA(dexclient);
+			addDEXclientToQueueB(dexclient);
+			createDepositWallet(rootA);
+			createDepositWallet(rootB);
+		} else if (cc.walletA == address(0)) {
+			addDEXclientToQueueA(dexclient);
+			createDepositWallet(rootA);
+		} else if (cc.walletB == address(0)) {
+			addDEXclientToQueueB(dexclient);
+			createDepositWallet(rootB);
 		}
-		Client cc = dexpairclients[dexclient];
+	}
 
-		TvmCell body = tvm.encodeBody(IDEXclient(dexclient).setPair, rootA, walletA, rootB, walletB);
-		dexclient.transfer({value:20000000, body:body});
+	function setPairDepositWallet(address value0) public override alwaysAccept functionID(0x0000000a){
+		address root = msg.sender;
+		address wallet = value0;
+			if (root == rootA){
+				address dexclient = takeFirstFromQueueA();
+				Client cc = dexpairclients[dexclient];
+				cc.walletA = wallet;
+				dexpairclients[dexclient] = cc;
+				TvmCell body = tvm.encodeBody(IDEXclient(dexclient).setPairDepositA, wallet);
+				dexclient.transfer({value:20000000, body:body});
+			} else if (root == rootB){
+				address dexclient = takeFirstFromQueueB();
+				Client cc = dexpairclients[dexclient];
+				cc.walletB = wallet;
+				dexpairclients[dexclient] = cc;
+				TvmCell body = tvm.encodeBody(IDEXclient(dexclient).setPairDepositB, wallet);
+				dexclient.transfer({value:20000000, body:body});
+			}
 	}
 
 	function sendTokens2(address from, address to, uint128 tokens, uint128 grams) public checkOwnerAndAccept returns (address transmitter, address receiver) {
@@ -131,11 +173,9 @@ contract DEXpair is IDEXpair {
 			transmitter.transfer({value:20000000, body:body});
 	}
 
-	function askBalanceTokens() public checkOwnerAndAccept {
+	function askBalancePairWallets() public checkOwnerAndAccept {
 		address transmitterA = walletA;
 		address transmitterB = walletB;
-		writerTokens[transmitterA] = false;
-		writerTokens[transmitterB] = false;
 		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(transmitterA).getBalance_InternalOwner, 0x00000006);
 		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(transmitterB).getBalance_InternalOwner, 0x00000006);
 		transmitterA.transfer({value:20000000, body:bodyA});
@@ -143,15 +183,14 @@ contract DEXpair is IDEXpair {
 	}
 
 
-	function setBalanceToken(uint128 value0) public onlyDEXpairWallets override functionID(0x00000006) {
-		writerTokens[msg.sender] = true;
-		balanceTokens[msg.sender] = value0;
+	function setWalletBalance(uint128 value0) public onlyDEXpairWallets override functionID(0x00000006) {
+		balanceWallets[msg.sender] = value0;
 	}
 
 
-	function getBalanceTokens() public view alwaysAccept returns (uint128 balance_walletA, uint128 balance_walletB) {
-		balance_walletA = balanceTokens[walletA];
-		balance_walletB = balanceTokens[walletB];
+	function getBalanceTokens() public view alwaysAccept returns (uint128 balanceWalletA, uint128 balanceWalletB) {
+		balanceWalletA = balanceWallets[walletA];
+		balanceWalletB = balanceWallets[walletB];
 	}
 
 	function setMsgGrams(uint128 value0) public checkOwnerAndAccept {

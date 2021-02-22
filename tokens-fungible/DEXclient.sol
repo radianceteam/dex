@@ -14,6 +14,8 @@ interface IDEXclient {
 	function setPair(address arg0, address arg1, address arg2, address arg3) external functionID(0x00000003);
 	function setBalanceToken(uint128 value0) external functionID(0x00000004);
 	function setNewEmptyWallet(address value0) external functionID(0x00000007);
+	function setPairDepositA(address arg0) external functionID(0x00000008);
+	function setPairDepositB(address arg0) external functionID(0x00000009);
 
 }
 
@@ -42,11 +44,11 @@ contract DEXclient is IDEXclient {
 		uint128 index;
 		address rootA;
 		address pairWalletA;
-		address depositWalletA
+		address depositWalletA;
 		uint128 allowanceA;
 		address rootB;
 		address pairWalletB;
-		address depositWalletB
+		address depositWalletB;
 		uint128 allowanceB;
 	}
 
@@ -55,7 +57,7 @@ contract DEXclient is IDEXclient {
 
 	uint128 tongrams1;
 	uint128 tongrams2;
-	
+
 	modifier alwaysAccept {
 		tvm.accept();
 		_;
@@ -84,7 +86,7 @@ contract DEXclient is IDEXclient {
 		statusConnection = true;
 	}
 
-	function setPair(address arg0, address arg1, address arg2, address arg3) public alwaysAccept override functionID(0x00000003) {
+	function setPair(address arg0, address arg1, address arg2, address arg3, address arg4, address arg5) public alwaysAccept override functionID(0x00000003) {
 		address dexpair = msg.sender;
 		Pair cp = pairs[dexpair];
 		if (!pairs.exists(dexpair)){
@@ -93,12 +95,29 @@ contract DEXclient is IDEXclient {
 		}
 		cp.rootA = arg0;
 		cp.pairWalletA = arg1;
+		cp.depositWalletA = arg2;
 		cp.allowanceA = 0;
-		cp.rootB = arg2;
-		cp.pairWalletB = arg3;
+		cp.rootB = arg3;
+		cp.pairWalletB = arg4;
+		cp.depositWalletB = arg5;
 		cp.allowanceB = 0;
 		pairs[dexpair] = cp;
 	}
+
+	function setPairDepositA(address arg0) public alwaysAccept override functionID(0x00000008) {
+		address dexpair = msg.sender;
+		Pair cp = pairs[dexpair];
+		cp.depositWalletA = arg0;
+		pairs[dexpair] = cp;
+	}
+
+	function setPairDepositB(address arg0) public alwaysAccept override functionID(0x00000009) {
+		address dexpair = msg.sender;
+		Pair cp = pairs[dexpair];
+		cp.depositWalletB = arg0;
+		pairs[dexpair] = cp;
+	}
+
 
 	function getPair(address value0) public view alwaysAccept returns (address arg0, address arg1, uint128 arg2, address arg3, address arg4, uint128 arg5) {
 		Pair cp = pairs[value0];

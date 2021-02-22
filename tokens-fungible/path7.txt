@@ -26,3 +26,6 @@ Windows10
 tonos-cli call 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d addProviderToQueue "{\"provider\":\"0:1f1838cfa8113290613e76d6b696ef44950c58c65a335bfbec2e9e4ff5ec2e45\"}" --abi Queue.abi.json
 tonos-cli call 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d addProviderToQueue "{\"provider\":\"0:c4d8d1558046f72990797b8151f9c584f14a2532b0bd52b8cf7e63cebe22bc1c\"}" --abi Queue.abi.json
 tonos-cli call 0:4f30d896d67e6ee22102fe798a7e06bf00bb80d13632199522a97cbc61f9580d addProviderToQueue "{\"provider\":\"0:738807e7da5ae5d8352ac660163e8f2a5f4eb2a9bc154dba385ef7dddbc2eebd\"}" --abi Queue.abi.json
+
+
+tonos-cli run 0:4afee5881a9c911df66064eab46b5c49f4efb7ccd7b19cbb0efef250836218d5 getName {} --abi RootTokenContract.abi

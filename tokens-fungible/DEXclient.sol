@@ -11,7 +11,7 @@ interface ITONTokenWallet {
 }
 
 interface IDEXclient {
-	function setPair(address arg0, address arg1, address arg2, address arg3) external functionID(0x00000003);
+	function setPair(address arg0, address arg1, address arg2, address arg3, address arg4, address arg5) external functionID(0x00000003);
 	function setBalanceToken(uint128 value0) external functionID(0x00000004);
 	function setNewEmptyWallet(address value0) external functionID(0x00000007);
 	function setPairDepositA(address arg0) external functionID(0x00000008);
@@ -20,15 +20,17 @@ interface IDEXclient {
 }
 
 interface IDEXpair {
-	function connectPair() external functionID(0x00000005);
-	function setBalanceToken(uint128 value0) external functionID(0x00000006);
+	function connect() external functionID(0x00000005);
+	function setPairDepositWallet(address value0) external functionID(0x0000000a);
+	function setWalletBalance(uint128 value0) external functionID(0x00000006);
+	function setPairReserveWallet(address value0) external functionID(0x0000000b);
 }
 
 contract DEXclient is IDEXclient {
 
 	// Wallet structure
 	struct Wallet {
-		uint128 index;
+		uint256 index;
 		address root;
 		uint128 balance;
 	}
@@ -41,7 +43,7 @@ contract DEXclient is IDEXclient {
 
 	// Pair structure
 	struct Pair {
-		uint128 index;
+		uint256 index;
 		address rootA;
 		address pairWalletA;
 		address depositWalletA;
@@ -57,6 +59,8 @@ contract DEXclient is IDEXclient {
 
 	uint128 tongrams1;
 	uint128 tongrams2;
+
+	uint128 constant PRICE_CONNECT_PAIR = 3000000000;
 
 	modifier alwaysAccept {
 		tvm.accept();
@@ -81,8 +85,8 @@ contract DEXclient is IDEXclient {
 
 	function connectPair(address pairAddr) public checkOwnerAndAccept view returns (bool statusConnection) {
 		statusConnection = false;
-		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).connectPair);
-		pairAddr.transfer({value:20000000, body:body});
+		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).connect);
+		pairAddr.transfer({value:PRICE_CONNECT_PAIR, body:body});
 		statusConnection = true;
 	}
 
@@ -92,16 +96,16 @@ contract DEXclient is IDEXclient {
 		if (!pairs.exists(dexpair)){
 			pairKeys.push(dexpair);
 			cp.index = pairKeys.length;
+			cp.rootA = arg0;
+			cp.pairWalletA = arg1;
+			cp.depositWalletA = arg2;
+			cp.allowanceA = 0;
+			cp.rootB = arg3;
+			cp.pairWalletB = arg4;
+			cp.depositWalletB = arg5;
+			cp.allowanceB = 0;
+			pairs[dexpair] = cp;
 		}
-		cp.rootA = arg0;
-		cp.pairWalletA = arg1;
-		cp.depositWalletA = arg2;
-		cp.allowanceA = 0;
-		cp.rootB = arg3;
-		cp.pairWalletB = arg4;
-		cp.depositWalletB = arg5;
-		cp.allowanceB = 0;
-		pairs[dexpair] = cp;
 	}
 
 	function setPairDepositA(address arg0) public alwaysAccept override functionID(0x00000008) {
@@ -119,15 +123,16 @@ contract DEXclient is IDEXclient {
 	}
 
 
-	function getPair(address value0) public view alwaysAccept returns (address arg0, address arg1, uint128 arg2, address arg3, address arg4, uint128 arg5) {
+	function getPair(address value0) public view alwaysAccept returns (address pairRootA, address pairReserveA, address clientDepositA, uint128 clientAllowanceA, address pairRootB, address pairReserveB, address clientDepositB, uint128 clientAllowanceB) {
 		Pair cp = pairs[value0];
-		arg0 = cp.rootA;
-		arg1 = cp.pairWalletA;
-		arg2 = cp.allowanceA;
-		arg3 = cp.rootB;
-		arg4 = cp.pairWalletB;
-		arg5 = cp.allowanceB;
-		if (pairs.exists(value0)){pairKeys.push(value0);}
+		pairRootA = cp.rootA;
+		pairReserveA = cp.pairWalletA;
+		clientDepositA = cp.depositWalletA;
+		clientAllowanceA = cp.allowanceA;
+		pairRootB = cp.rootB;
+		pairReserveB = cp.pairWalletB;
+		clientDepositB = cp.depositWalletB;
+		clientAllowanceB = cp.allowanceB;
 	}
 
 	function sendTokens(address from, address to, uint128 tokens, uint128 grams) public checkOwnerAndAccept view returns (address transmitter, address receiver, TvmCell body) {
@@ -206,7 +211,7 @@ contract DEXclient is IDEXclient {
 		}
 	}
 
-	function createPairWallets(address pairAddr) public view checkOwnerAndAccept returns (bool createStatusA, bool createStatusB) {
+	function createPairClientWallets(address pairAddr) public view checkOwnerAndAccept returns (bool createStatusA, bool createStatusB) {
 		createStatusA = false;
 		createStatusB = false;
 		Pair cp = pairs[pairAddr];
@@ -214,10 +219,10 @@ contract DEXclient is IDEXclient {
 		if (!roots.exists(cp.rootB)){createNewEmptyWallet(cp.rootB);createStatusB = true;}
 	}
 
-	function getPairWallets(address pairAddr) public view alwaysAccept returns (address pairWalletA, address pairWalletB){
+	function getPairClientWallets(address pairAddr) public view alwaysAccept returns (address clientWalletA, address clientWalletB){
 		Pair cp = pairs[pairAddr];
-		pairWalletA = roots[cp.rootA];
-		pairWalletB = roots[cp.rootB];
+		clientWalletA = roots[cp.rootA];
+		clientWalletB = roots[cp.rootB];
 	}
 
 	function askPairWalletsBalance(address pairAddr) public view checkOwnerAndAccept {
@@ -226,10 +231,10 @@ contract DEXclient is IDEXclient {
 		askBalanceToken(roots[cp.rootB]);
 	}
 
-	function getPairWalletsBalance(address pairAddr) public view alwaysAccept returns (uint128 balanceWalletA, uint128 balanceWalletB) {
+	function getPairWalletsBalance(address pairAddr) public view alwaysAccept returns (uint128 balanceClientWalletA, uint128 balanceClientWalletB) {
 		Pair cp = pairs[pairAddr];
-		balanceWalletA = getWalletBalance(roots[cp.rootA]);
-		balanceWalletB = getWalletBalance(roots[cp.rootB]);
+		balanceClientWalletA = getWalletBalance(roots[cp.rootA]);
+		balanceClientWalletB = getWalletBalance(roots[cp.rootB]);
 	}
 
 	function showContractAddress() public pure alwaysAccept returns (address dexclient, uint256 dexclientUINT256){
@@ -237,11 +242,11 @@ contract DEXclient is IDEXclient {
 		dexclientUINT256 = dexclient.value;
 	}
 
-	function step1ToPairProvider(address pairAddr, uint128 qtyA) public view checkOwnerAndAccept returns (bool status) {
-		status = false;
-		Pair cp = pairs[pairAddr];
-
-	}
+	// function step1ToPairProvider(address pairAddr, uint128 qtyA) public view checkOwnerAndAccept returns (bool status) {
+	// 	status = false;
+	// 	Pair cp = pairs[pairAddr];
+	//
+	// }
 
 
 

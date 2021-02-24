@@ -35,7 +35,8 @@ async function main(client) {
   console.log(`Future address of the contract will be: ${address}`);
 
   let contractJson = JSON.stringify({address:address, keys:contractKeys});
-  fs.writeFileSync( pathJson, contractJson,{flag:'a+'});   //'a+' is append mode
+  // fs.writeFileSync( pathJson, contractJson,{flag:'a+'});   //'a+' is append mode
+  fs.writeFileSync( pathJson, contractJson,{flag:'w'});
   console.log("Future address of the contract  and keys written successfully to:", pathJson);
 
   const giverJson = fs.readFileSync(pathGiverJson,{encoding: "utf8"});

@@ -3,7 +3,25 @@
 	"header": ["time", "expire"],
 	"functions": [
 		{
-			"name": "isDEXpairToken",
+			"name": "constructor",
+			"inputs": [
+				{"name":"root0","type":"address"},
+				{"name":"root1","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "isDEXpairWallet",
+			"inputs": [
+				{"name":"arg0","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		},
+		{
+			"name": "isDEXpairRoot",
 			"inputs": [
 				{"name":"arg0","type":"address"}
 			],
@@ -22,9 +40,27 @@
 			]
 		},
 		{
-			"name": "connectPair",
+			"name": "createDepositWallet",
+			"inputs": [
+				{"name":"rootAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"createStatus","type":"bool"}
+			]
+		},
+		{
+			"name": "connect",
 			"id": "0x5",
 			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setPairDepositWallet",
+			"id": "0xA",
+			"inputs": [
+				{"name":"value0","type":"address"}
 			],
 			"outputs": [
 			]
@@ -57,14 +93,14 @@
 			]
 		},
 		{
-			"name": "askBalanceTokens",
+			"name": "askBalancePairWallets",
 			"inputs": [
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "setBalanceToken",
+			"name": "setWalletBalance",
 			"id": "0x6",
 			"inputs": [
 				{"name":"value0","type":"uint128"}
@@ -73,41 +109,12 @@
 			]
 		},
 		{
-			"name": "setPair",
-			"inputs": [
-				{"name":"arg0","type":"address"},
-				{"name":"arg1","type":"address"},
-				{"name":"arg2","type":"address"},
-				{"name":"arg3","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "resetPair",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "getPair",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"arg0","type":"address"},
-				{"name":"arg1","type":"address"},
-				{"name":"arg2","type":"address"},
-				{"name":"arg3","type":"address"}
-			]
-		},
-		{
 			"name": "getBalanceTokens",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"balance_tokenA","type":"uint128"},
-				{"name":"balance_tokenB","type":"uint128"}
+				{"name":"balanceReserveA","type":"uint128"},
+				{"name":"balanceReserveB","type":"uint128"}
 			]
 		},
 		{
@@ -127,19 +134,76 @@
 			]
 		},
 		{
-			"name": "getWriters",
+			"name": "getLengthQueueA",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"param0","type":"bool"},
-				{"name":"param1","type":"bool"}
+				{"name":"length","type":"uint128"}
 			]
 		},
 		{
-			"name": "constructor",
+			"name": "getAllQueueA",
 			"inputs": [
 			],
 			"outputs": [
+				{"name":"queueArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "getLengthQueueB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"length","type":"uint128"}
+			]
+		},
+		{
+			"name": "getAllQueueB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"queueArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "setPairReserveWallet",
+			"id": "0xB",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPair",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"addressRootA","type":"address"},
+				{"name":"addressRootB","type":"address"},
+				{"name":"addressReserveA","type":"address"},
+				{"name":"addressReserveB","type":"address"},
+				{"name":"balanceReserveA","type":"uint128"},
+				{"name":"balanceReserveB","type":"uint128"}
+			]
+		},
+		{
+			"name": "getClient",
+			"inputs": [
+				{"name":"dexclient","type":"address"}
+			],
+			"outputs": [
+				{"name":"indexDEXclient","type":"uint256"},
+				{"name":"depositWalletA","type":"address"},
+				{"name":"depositWalletB","type":"address"}
+			]
+		},
+		{
+			"name": "getClientsArr",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"dexclientsArr","type":"address[]"}
 			]
 		}
 	],

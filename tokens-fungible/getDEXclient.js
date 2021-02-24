@@ -81,7 +81,7 @@ async function main(client) {
                     abi: abi,
                     address: contractAddress,
                     call_set: {
-                      function_name: 'getPairWallets',
+                      function_name: 'getPairClientWallets',
                       input: {
                         pairAddr:pairAddress,
                       }

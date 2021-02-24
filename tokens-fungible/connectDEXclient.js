@@ -32,7 +32,7 @@ async function main(client) {
         call_set: {
           function_name: 'connectPair',
           input: {
-            arg0: pairAddress,
+            pairAddr: pairAddress,
           }
         },
         signer: {
@@ -42,8 +42,8 @@ async function main(client) {
       }
 
       let response = await client.processing.process_message(params);
-      console.log('Your setPair proceed. Tx id: ', response.transaction.id);
-      console.log('Your setPair output: ', response.decoded.output);
+      console.log('Your connectPair proceed. Tx id: ', response.transaction.id);
+      console.log('Your connectPair output: ', response.decoded.output);
 
       let resultQC = await client.net.query_collection({
             collection: 'accounts',

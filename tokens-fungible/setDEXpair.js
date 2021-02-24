@@ -4,10 +4,8 @@ const contract = require('./DEXpairContract.js'); //specify the path to the .js 
 const fs = require('fs');
 const converter = require('hex2dec');
 const pathJson = './DEXpairContract.json';
-const rootTokenA = "0:cf5d9b0d7fe0dd14f8d75b9c511fab9805ae64dc4c1f08b955c69e44193518a1";
-const walletTokenA = "0:f7e4793a296f6f41f6a74f497bf5db4538c98df067f97a5a5d9fd3fec3ed6967";
-const rootTokenB = "0:eaa4b8e54760d2922d6e23da188d7a2c6824ed108a7c15be5de7b97d9740253e";
-const walletTokenB = "0:8de0c102119c9226d6b96a23f5816ba04ada4447ecab8fd3b1e8a1022b2126ae";
+const rootTokenA = "0:bfd9c9f619b11ce1f3f9520af60dd64a5d4773116afab5e4fcd177208a9c7358";
+const rootTokenB = "0:95f08c717d720bd7fa626b064673f9544b47cef60657ea2e23966dfe6dd329c3";
 
 
 async function main(client) {
@@ -30,12 +28,9 @@ async function main(client) {
           value: contract.package.abi
         },
         call_set: {
-          function_name: 'setPair',
+          function_name: 'createDepositWallet',
           input: {
-            arg0: rootTokenA,
-            arg1: walletTokenA,
-            arg2: rootTokenB,
-            arg3: walletTokenB,
+            rootAddr: rootTokenA,
           }
         },
         signer: {
@@ -45,8 +40,33 @@ async function main(client) {
       }
 
       let response = await client.processing.process_message(params);
-      console.log('Your setPair proceed. Tx id: ', response.transaction.id);
-      console.log('Your setPair output: ', response.decoded.output);
+      console.log('Your createDepositWallet proceed. Tx id: ', response.transaction.id);
+      console.log('Your createDepositWallet output: ', response.decoded.output);
+
+      const params1 = {
+        send_events: false,
+        message_encode_params: {
+          address: contractAddress,
+          abi: {
+            type: 'Contract',
+            value: contract.package.abi
+          },
+          call_set: {
+            function_name: 'createDepositWallet',
+            input: {
+              rootAddr: rootTokenB,
+            }
+          },
+          signer: {
+            type: 'Keys',
+            keys: contractKeys }
+          }
+        }
+
+        let response1 = await client.processing.process_message(params1);
+        console.log('Your createDepositWallet proceed. Tx id: ', response1.transaction.id);
+        console.log('Your createDepositWallet output: ', response1.decoded.output);
+
 
       let resultQC = await client.net.query_collection({
             collection: 'accounts',

@@ -7,7 +7,25 @@ const abi = {
 	"header": ["time", "expire"],
 	"functions": [
 		{
-			"name": "isDEXpairToken",
+			"name": "constructor",
+			"inputs": [
+				{"name":"root0","type":"address"},
+				{"name":"root1","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "isDEXpairWallet",
+			"inputs": [
+				{"name":"arg0","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		},
+		{
+			"name": "isDEXpairRoot",
 			"inputs": [
 				{"name":"arg0","type":"address"}
 			],
@@ -26,9 +44,27 @@ const abi = {
 			]
 		},
 		{
-			"name": "connectPair",
+			"name": "createDepositWallet",
+			"inputs": [
+				{"name":"rootAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"createStatus","type":"bool"}
+			]
+		},
+		{
+			"name": "connect",
 			"id": "0x5",
 			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setPairDepositWallet",
+			"id": "0xA",
+			"inputs": [
+				{"name":"value0","type":"address"}
 			],
 			"outputs": [
 			]
@@ -61,14 +97,14 @@ const abi = {
 			]
 		},
 		{
-			"name": "askBalanceTokens",
+			"name": "askBalancePairWallets",
 			"inputs": [
 			],
 			"outputs": [
 			]
 		},
 		{
-			"name": "setBalanceToken",
+			"name": "setWalletBalance",
 			"id": "0x6",
 			"inputs": [
 				{"name":"value0","type":"uint128"}
@@ -77,41 +113,12 @@ const abi = {
 			]
 		},
 		{
-			"name": "setPair",
-			"inputs": [
-				{"name":"arg0","type":"address"},
-				{"name":"arg1","type":"address"},
-				{"name":"arg2","type":"address"},
-				{"name":"arg3","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "resetPair",
-			"inputs": [
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "getPair",
-			"inputs": [
-			],
-			"outputs": [
-				{"name":"arg0","type":"address"},
-				{"name":"arg1","type":"address"},
-				{"name":"arg2","type":"address"},
-				{"name":"arg3","type":"address"}
-			]
-		},
-		{
 			"name": "getBalanceTokens",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"balance_tokenA","type":"uint128"},
-				{"name":"balance_tokenB","type":"uint128"}
+				{"name":"balanceReserveA","type":"uint128"},
+				{"name":"balanceReserveB","type":"uint128"}
 			]
 		},
 		{
@@ -131,19 +138,76 @@ const abi = {
 			]
 		},
 		{
-			"name": "getWriters",
+			"name": "getLengthQueueA",
 			"inputs": [
 			],
 			"outputs": [
-				{"name":"param0","type":"bool"},
-				{"name":"param1","type":"bool"}
+				{"name":"length","type":"uint128"}
 			]
 		},
 		{
-			"name": "constructor",
+			"name": "getAllQueueA",
 			"inputs": [
 			],
 			"outputs": [
+				{"name":"queueArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "getLengthQueueB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"length","type":"uint128"}
+			]
+		},
+		{
+			"name": "getAllQueueB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"queueArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "setPairReserveWallet",
+			"id": "0xB",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPair",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"addressRootA","type":"address"},
+				{"name":"addressRootB","type":"address"},
+				{"name":"addressReserveA","type":"address"},
+				{"name":"addressReserveB","type":"address"},
+				{"name":"balanceReserveA","type":"uint128"},
+				{"name":"balanceReserveB","type":"uint128"}
+			]
+		},
+		{
+			"name": "getClient",
+			"inputs": [
+				{"name":"dexclient","type":"address"}
+			],
+			"outputs": [
+				{"name":"indexDEXclient","type":"uint256"},
+				{"name":"depositWalletA","type":"address"},
+				{"name":"depositWalletB","type":"address"}
+			]
+		},
+		{
+			"name": "getClientsArr",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"dexclientsArr","type":"address[]"}
 			]
 		}
 	],
@@ -155,7 +219,7 @@ const abi = {
 
 const pkg = {
     abi,
-    imageBase64: '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',
+    imageBase64: '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',
 };
 
 class DEXpairContract {
@@ -173,14 +237,17 @@ class DEXpairContract {
     }
 
     /**
+     * @param {object} constructorParams
+     * @param {string} constructorParams.root0 (address)
+     * @param {string} constructorParams.root1 (address)
      */
-    async deploy() {
+    async deploy(constructorParams) {
         if (!this.keys) {
             this.keys = await this.client.crypto.ed25519Keypair();
         }
         this.address = (await this.client.contracts.deploy({
             package: pkg,
-            constructorParams: {},
+            constructorParams,
             initParams: {},
             keyPair: this.keys,
         })).address;
@@ -219,7 +286,7 @@ class DEXpairContract {
     }
 
     /**
-     * @typedef DEXpairContract_isDEXpairToken
+     * @typedef DEXpairContract_isDEXpairWallet
      * @type {object}
      * @property {bool} value0 
      */
@@ -227,19 +294,43 @@ class DEXpairContract {
     /**
      * @param {object} params
      * @param {string} params.arg0 (address)
-     * @return {Promise.<DEXpairContract_isDEXpairToken>}
+     * @return {Promise.<DEXpairContract_isDEXpairWallet>}
      */
-    isDEXpairToken(params) {
-        return this.run('isDEXpairToken', params);
+    isDEXpairWallet(params) {
+        return this.run('isDEXpairWallet', params);
     }
 
     /**
      * @param {object} params
      * @param {string} params.arg0 (address)
-     * @return {Promise.<DEXpairContract_isDEXpairToken>}
+     * @return {Promise.<DEXpairContract_isDEXpairWallet>}
      */
-    isDEXpairTokenLocal(params) {
-        return this.runLocal('isDEXpairToken', params);
+    isDEXpairWalletLocal(params) {
+        return this.runLocal('isDEXpairWallet', params);
+    }
+
+    /**
+     * @typedef DEXpairContract_isDEXpairRoot
+     * @type {object}
+     * @property {bool} value0 
+     */
+
+    /**
+     * @param {object} params
+     * @param {string} params.arg0 (address)
+     * @return {Promise.<DEXpairContract_isDEXpairRoot>}
+     */
+    isDEXpairRoot(params) {
+        return this.run('isDEXpairRoot', params);
+    }
+
+    /**
+     * @param {object} params
+     * @param {string} params.arg0 (address)
+     * @return {Promise.<DEXpairContract_isDEXpairRoot>}
+     */
+    isDEXpairRootLocal(params) {
+        return this.runLocal('isDEXpairRoot', params);
     }
 
     /**
@@ -263,15 +354,55 @@ class DEXpairContract {
     }
 
     /**
+     * @typedef DEXpairContract_createDepositWallet
+     * @type {object}
+     * @property {bool} createStatus 
      */
-    connectPair() {
-        return this.run('connectPair', {});
+
+    /**
+     * @param {object} params
+     * @param {string} params.rootAddr (address)
+     * @return {Promise.<DEXpairContract_createDepositWallet>}
+     */
+    createDepositWallet(params) {
+        return this.run('createDepositWallet', params);
+    }
+
+    /**
+     * @param {object} params
+     * @param {string} params.rootAddr (address)
+     * @return {Promise.<DEXpairContract_createDepositWallet>}
+     */
+    createDepositWalletLocal(params) {
+        return this.runLocal('createDepositWallet', params);
     }
 
     /**
      */
-    connectPairLocal() {
-        return this.runLocal('connectPair', {});
+    connect() {
+        return this.run('connect', {});
+    }
+
+    /**
+     */
+    connectLocal() {
+        return this.runLocal('connect', {});
+    }
+
+    /**
+     * @param {object} params
+     * @param {string} params.value0 (address)
+     */
+    setPairDepositWallet(params) {
+        return this.run('setPairDepositWallet', params);
+    }
+
+    /**
+     * @param {object} params
+     * @param {string} params.value0 (address)
+     */
+    setPairDepositWalletLocal(params) {
+        return this.runLocal('setPairDepositWallet', params);
     }
 
     /**
@@ -339,94 +470,37 @@ class DEXpairContract {
 
     /**
      */
-    askBalanceTokens() {
-        return this.run('askBalanceTokens', {});
+    askBalancePairWallets() {
+        return this.run('askBalancePairWallets', {});
     }
 
     /**
      */
-    askBalanceTokensLocal() {
-        return this.runLocal('askBalanceTokens', {});
-    }
-
-    /**
-     * @param {object} params
-     * @param {uint128} params.value0
-     */
-    setBalanceToken(params) {
-        return this.run('setBalanceToken', params);
+    askBalancePairWalletsLocal() {
+        return this.runLocal('askBalancePairWallets', {});
     }
 
     /**
      * @param {object} params
      * @param {uint128} params.value0
      */
-    setBalanceTokenLocal(params) {
-        return this.runLocal('setBalanceToken', params);
+    setWalletBalance(params) {
+        return this.run('setWalletBalance', params);
     }
 
     /**
      * @param {object} params
-     * @param {string} params.arg0 (address)
-     * @param {string} params.arg1 (address)
-     * @param {string} params.arg2 (address)
-     * @param {string} params.arg3 (address)
+     * @param {uint128} params.value0
      */
-    setPair(params) {
-        return this.run('setPair', params);
-    }
-
-    /**
-     * @param {object} params
-     * @param {string} params.arg0 (address)
-     * @param {string} params.arg1 (address)
-     * @param {string} params.arg2 (address)
-     * @param {string} params.arg3 (address)
-     */
-    setPairLocal(params) {
-        return this.runLocal('setPair', params);
-    }
-
-    /**
-     */
-    resetPair() {
-        return this.run('resetPair', {});
-    }
-
-    /**
-     */
-    resetPairLocal() {
-        return this.runLocal('resetPair', {});
-    }
-
-    /**
-     * @typedef DEXpairContract_getPair
-     * @type {object}
-     * @property {string} arg0  (address)
-     * @property {string} arg1  (address)
-     * @property {string} arg2  (address)
-     * @property {string} arg3  (address)
-     */
-
-    /**
-     * @return {Promise.<DEXpairContract_getPair>}
-     */
-    getPair() {
-        return this.run('getPair', {});
-    }
-
-    /**
-     * @return {Promise.<DEXpairContract_getPair>}
-     */
-    getPairLocal() {
-        return this.runLocal('getPair', {});
+    setWalletBalanceLocal(params) {
+        return this.runLocal('setWalletBalance', params);
     }
 
     /**
      * @typedef DEXpairContract_getBalanceTokens
      * @type {object}
-     * @property {uint128} balance_tokenA 
-     * @property {uint128} balance_tokenB 
+     * @property {uint128} balanceReserveA 
+     * @property {uint128} balanceReserveB 
      */
 
     /**
@@ -480,24 +554,170 @@ class DEXpairContract {
     }
 
     /**
-     * @typedef DEXpairContract_getWriters
+     * @typedef DEXpairContract_getLengthQueueA
      * @type {object}
-     * @property {bool} param0 
-     * @property {bool} param1 
+     * @property {uint128} length 
      */
 
     /**
-     * @return {Promise.<DEXpairContract_getWriters>}
+     * @return {Promise.<DEXpairContract_getLengthQueueA>}
      */
-    getWriters() {
-        return this.run('getWriters', {});
+    getLengthQueueA() {
+        return this.run('getLengthQueueA', {});
     }
 
     /**
-     * @return {Promise.<DEXpairContract_getWriters>}
+     * @return {Promise.<DEXpairContract_getLengthQueueA>}
      */
-    getWritersLocal() {
-        return this.runLocal('getWriters', {});
+    getLengthQueueALocal() {
+        return this.runLocal('getLengthQueueA', {});
+    }
+
+    /**
+     * @typedef DEXpairContract_getAllQueueA
+     * @type {object}
+     * @property {string[]} queueArr  (address[])
+     */
+
+    /**
+     * @return {Promise.<DEXpairContract_getAllQueueA>}
+     */
+    getAllQueueA() {
+        return this.run('getAllQueueA', {});
+    }
+
+    /**
+     * @return {Promise.<DEXpairContract_getAllQueueA>}
+     */
+    getAllQueueALocal() {
+        return this.runLocal('getAllQueueA', {});
+    }
+
+    /**
+     * @typedef DEXpairContract_getLengthQueueB
+     * @type {object}
+     * @property {uint128} length 
+     */
+
+    /**
+     * @return {Promise.<DEXpairContract_getLengthQueueB>}
+     */
+    getLengthQueueB() {
+        return this.run('getLengthQueueB', {});
+    }
+
+    /**
+     * @return {Promise.<DEXpairContract_getLengthQueueB>}
+     */
+    getLengthQueueBLocal() {
+        return this.runLocal('getLengthQueueB', {});
+    }
+
+    /**
+     * @typedef DEXpairContract_getAllQueueB
+     * @type {object}
+     * @property {string[]} queueArr  (address[])
+     */
+
+    /**
+     * @return {Promise.<DEXpairContract_getAllQueueB>}
+     */
+    getAllQueueB() {
+        return this.run('getAllQueueB', {});
+    }
+
+    /**
+     * @return {Promise.<DEXpairContract_getAllQueueB>}
+     */
+    getAllQueueBLocal() {
+        return this.runLocal('getAllQueueB', {});
+    }
+
+    /**
+     * @param {object} params
+     * @param {string} params.value0 (address)
+     */
+    setPairReserveWallet(params) {
+        return this.run('setPairReserveWallet', params);
+    }
+
+    /**
+     * @param {object} params
+     * @param {string} params.value0 (address)
+     */
+    setPairReserveWalletLocal(params) {
+        return this.runLocal('setPairReserveWallet', params);
+    }
+
+    /**
+     * @typedef DEXpairContract_getPair
+     * @type {object}
+     * @property {string} addressRootA  (address)
+     * @property {string} addressRootB  (address)
+     * @property {string} addressReserveA  (address)
+     * @property {string} addressReserveB  (address)
+     * @property {uint128} balanceReserveA 
+     * @property {uint128} balanceReserveB 
+     */
+
+    /**
+     * @return {Promise.<DEXpairContract_getPair>}
+     */
+    getPair() {
+        return this.run('getPair', {});
+    }
+
+    /**
+     * @return {Promise.<DEXpairContract_getPair>}
+     */
+    getPairLocal() {
+        return this.runLocal('getPair', {});
+    }
+
+    /**
+     * @typedef DEXpairContract_getClient
+     * @type {object}
+     * @property {string} indexDEXclient  (uint256)
+     * @property {string} depositWalletA  (address)
+     * @property {string} depositWalletB  (address)
+     */
+
+    /**
+     * @param {object} params
+     * @param {string} params.dexclient (address)
+     * @return {Promise.<DEXpairContract_getClient>}
+     */
+    getClient(params) {
+        return this.run('getClient', params);
+    }
+
+    /**
+     * @param {object} params
+     * @param {string} params.dexclient (address)
+     * @return {Promise.<DEXpairContract_getClient>}
+     */
+    getClientLocal(params) {
+        return this.runLocal('getClient', params);
+    }
+
+    /**
+     * @typedef DEXpairContract_getClientsArr
+     * @type {object}
+     * @property {string[]} dexclientsArr  (address[])
+     */
+
+    /**
+     * @return {Promise.<DEXpairContract_getClientsArr>}
+     */
+    getClientsArr() {
+        return this.run('getClientsArr', {});
+    }
+
+    /**
+     * @return {Promise.<DEXpairContract_getClientsArr>}
+     */
+    getClientsArrLocal() {
+        return this.runLocal('getClientsArr', {});
     }
 
 }

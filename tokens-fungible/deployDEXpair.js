@@ -7,6 +7,8 @@ const pathJson = './DEXpairContract.json';
 const pathGiverJson = './GiverContractNTD.json';
 const giver = require('./GiverContract.js');
 const giverabi = giver.package.abi;
+const rootTokenA = "0:bfd9c9f619b11ce1f3f9520af60dd64a5d4773116afab5e4fcd177208a9c7358";
+const rootTokenB = "0:95f08c717d720bd7fa626b064673f9544b47cef60657ea2e23966dfe6dd329c3";
 
 async function main(client) {
   const abi = {
@@ -23,7 +25,10 @@ async function main(client) {
     },
     call_set: {
       function_name: 'constructor',
-      input: {},
+      input: {
+        root0:rootTokenA,
+        root1:rootTokenB,
+      },
     },
     signer: {
       type: 'Keys',
@@ -35,7 +40,9 @@ async function main(client) {
   console.log(`Future address of the contract will be: ${address}`);
 
   let contractJson = JSON.stringify({address:address, keys:contractKeys});
-  fs.writeFileSync( pathJson, contractJson,{flag:'a+'});   //'a+' is append mode
+  // fs.writeFileSync( pathJson, contractJson,{flag:'a+'});   //'a+' is append mode
+  fs.writeFileSync( pathJson, contractJson,{flag:'w'}); 
+
   console.log("Future address of the contract  and keys written successfully to:", pathJson);
 
   const giverJson = fs.readFileSync(pathGiverJson,{encoding: "utf8"});
@@ -84,7 +91,7 @@ async function main(client) {
           server_address: 'net.ton.dev'
         }
       });
-      console.log("Hello net.ton.dev TON!");
+      console.log("Hello net.ton.dev!");
       await main(client);
       process.exit(0);
     } catch (error) {

@@ -1,9 +1,19 @@
 {
   "dependencies": {
-    "@tonclient/core": "^1.5.3",
-    "@tonclient/lib-node": "^1.5.3",
+    "@tonclient/core": "^1.8.0",
+    "@tonclient/lib-node": "^1.8.0",
     "ascii-hex": "^1.0.1",
+    "fs": "^0.0.1-security",
     "hex2dec": "^1.1.2",
     "sudo-js": "^1.0.2"
-  }
+  },
+  "name": "tokens-fungible",
+  "description": "## 1. Introduction",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC"
 }

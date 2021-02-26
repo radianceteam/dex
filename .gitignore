@@ -104,4 +104,4 @@ dist
 .tern-port
 
 /DEX-clients/DEX-client*
-tokens-fungible/
+/tokens-fungible/

@@ -114,8 +114,8 @@ contract DEXpair is IDEXpair {
 		address creator = rootAddr;
 		address owner = address(this);
 		uint256 ownerUINT = owner.value;
-		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000a, 0, walletId, ownerUINT, 500000000);
-		creator.transfer({value:1000000000, bounce:false, body:body});
+		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000a, 0, walletId, ownerUINT, 1000000);	//500000000
+		creator.transfer({value:110000000, bounce:false, body:body});	//1000000000
 		createStatus = true;
 	}
 
@@ -133,7 +133,7 @@ contract DEXpair is IDEXpair {
 		cc.walletB = address(0);
 		dexpairclients[dexclient] = cc;
 		TvmCell body = tvm.encodeBody(IDEXclient(dexclient).setPair, rootA, reserveA, address(0), rootB, reserveB, address(0));
-		dexclient.transfer({value:200000000, body:body});
+		dexclient.transfer({value:110000000, body:body});	//200000000
 
 		// if (!dexpairclients.exists(dexclient)){
 		// 	addDEXclientToQueueA(dexclient);
@@ -172,14 +172,14 @@ contract DEXpair is IDEXpair {
 				cc.walletA = wallet;
 				dexpairclients[dexclient] = cc;
 				TvmCell body = tvm.encodeBody(IDEXclient(dexclient).setPairDepositA, wallet);
-				dexclient.transfer({value:20000000, body:body});
+				dexclient.transfer({value:1000000, body:body});	//20000000
 			} else if (root == rootB){
 				address dexclient = takeFirstFromQueueB();
 				Client cc = dexpairclients[dexclient];
 				cc.walletB = wallet;
 				dexpairclients[dexclient] = cc;
 				TvmCell body = tvm.encodeBody(IDEXclient(dexclient).setPairDepositB, wallet);
-				dexclient.transfer({value:20000000, body:body});
+				dexclient.transfer({value:1000000, body:body});	//20000000
 			}
 	}
 
@@ -187,7 +187,7 @@ contract DEXpair is IDEXpair {
 	function sendTokens2(address from, address to, uint128 tokens, uint128 grams) public checkOwnerAndAccept returns (address transmitter, address receiver) {
       transmitter = from;
 			receiver = to;
-			ITONTokenWallet(transmitter).transfer{value:20000000}(receiver, tokens, grams);
+			ITONTokenWallet(transmitter).transfer{value:1000000}(receiver, tokens, grams);  //20000000
 	}
 
 	// Function to send tokens base.
@@ -195,7 +195,7 @@ contract DEXpair is IDEXpair {
       transmitter = from;
 			receiver = to;
 			body = tvm.encodeBody(ITONTokenWallet(transmitter).transfer, receiver, tokens, grams);
-			transmitter.transfer({value:20000000, body:body});
+			transmitter.transfer({value:1000000, body:body});	//20000000
 	}
 
 	// Function to ask pair reserve wallets their balance.
@@ -204,8 +204,8 @@ contract DEXpair is IDEXpair {
 		address transmitterB = reserveB;
 		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(transmitterA).getBalance_InternalOwner, 0x00000006);
 		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(transmitterB).getBalance_InternalOwner, 0x00000006);
-		transmitterA.transfer({value:20000000, body:bodyA});
-		transmitterB.transfer({value:20000000, body:bodyB});
+		transmitterA.transfer({value:1000000, body:bodyA});	//20000000
+		transmitterB.transfer({value:1000000, body:bodyB});	//20000000
 	}
 
 	// Callback function to set pair reserve wallets their balance.
@@ -321,8 +321,8 @@ contract DEXpair is IDEXpair {
 		address creator = rootAddr;
 		address owner = address(this);
 		uint256 ownerUINT = owner.value;
-		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000b, 0, 0, ownerUINT, 1000000000);
-		creator.transfer({value:2000000000, bounce:false, body:body});
+		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000b, 0, 0, ownerUINT, 1000000); //1000000000
+		creator.transfer({value:110000000, bounce:false, body:body});	//2000000000
 		createStatus = true;
 	}
 
@@ -362,9 +362,4 @@ contract DEXpair is IDEXpair {
 	function getClientsArr() public view alwaysAccept returns (address[] dexclientsArr) {
 		dexclientsArr = dexpairclientKeys;
 	}
-
-
-
-
-
 }

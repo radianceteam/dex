@@ -102,3 +102,6 @@ dist
 
 # TernJS port file
 .tern-port
+
+/DEX-clients/DEX-client*
+tokens-fungible/

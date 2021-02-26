@@ -1,4 +1,4 @@
-pragma solidity >= 0.6.0;
+pragma solidity >=0.6.0;
 pragma AbiHeader expire;
 
 interface IRootTokenContract {
@@ -60,7 +60,7 @@ contract DEXclient is IDEXclient {
 	uint128 tongrams1;
 	uint128 tongrams2;
 
-	uint128 constant PRICE_CONNECT_PAIR = 3000000000;
+	uint128 constant PRICE_CONNECT_PAIR = 110000000;// 3000000000;
 
 	modifier alwaysAccept {
 		tvm.accept();
@@ -139,20 +139,20 @@ contract DEXclient is IDEXclient {
 		transmitter = from;
 		receiver = to;
 		body = tvm.encodeBody(ITONTokenWallet(transmitter).transfer, receiver, tokens, grams);
-		transmitter.transfer({value:20000000, body:body});
+		transmitter.transfer({value:1000000, body:body});	//20000000
 	}
 
 	function sendTokens2(address from, address to, uint128 tokens, uint128 grams) public checkOwnerAndAccept returns (address transmitter, address receiver) {
 		transmitter = from;
 		receiver = to;
-		ITONTokenWallet(transmitter).transfer{value:20000000}(receiver, tokens, grams);
+		ITONTokenWallet(transmitter).transfer{value:1000000}(receiver, tokens, grams);//20000000
 	}
 
 
 	function askBalanceToken(address walletAddr) public view checkOwnerAndAccept {
 		address transmitter = walletAddr;
 		TvmCell body = tvm.encodeBody(ITONTokenWallet(transmitter).getBalance_InternalOwner, 0x00000004);
-		transmitter.transfer({value:20000000, body:body});
+		transmitter.transfer({value:1000000, body:body});	//20000000
 	}
 
 	function askBalanceAllTokens() public view checkOwnerAndAccept {
@@ -190,8 +190,8 @@ contract DEXclient is IDEXclient {
 			address creator = rootAddr;
 			address owner = address(this);
 			uint256 ownerUINT = owner.value;
-			TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, 1000000000);
-			creator.transfer({value:2000000000, bounce:false, body:body});
+			TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, 1000000);	//1000000000
+			creator.transfer({value:110000000, bounce:false, body:body});	//2000000000
 			createStatus = true;
 		}
 	}

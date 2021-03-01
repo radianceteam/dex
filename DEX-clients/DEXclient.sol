@@ -139,20 +139,20 @@ contract DEXclient is IDEXclient {
 		transmitter = from;
 		receiver = to;
 		body = tvm.encodeBody(ITONTokenWallet(transmitter).transfer, receiver, tokens, grams);
-		transmitter.transfer({value:44000000, body:body});	//20000000
+		transmitter.transfer({value:20000000, body:body});	//20000000
 	}
 
 	function sendTokens2(address from, address to, uint128 tokens, uint128 grams) public checkOwnerAndAccept returns (address transmitter, address receiver) {
 		transmitter = from;
 		receiver = to;
-		ITONTokenWallet(transmitter).transfer{value:33000000}(receiver, tokens, grams);//20000000
+		ITONTokenWallet(transmitter).transfer{value:20000000}(receiver, tokens, grams);//20000000
 	}
 
 
 	function askBalanceToken(address walletAddr) public view checkOwnerAndAccept {
 		address transmitter = walletAddr;
 		TvmCell body = tvm.encodeBody(ITONTokenWallet(transmitter).getBalance_InternalOwner, 0x00000004);
-		transmitter.transfer({value:22000000, body:body});	//20000000
+		transmitter.transfer({value:20000000, body:body});	//20000000
 	}
 
 	function askBalanceAllTokens() public view checkOwnerAndAccept {

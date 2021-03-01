@@ -1,11 +1,11 @@
 const {TonClient} = require("@tonclient/core");
 const {libNode} = require("@tonclient/lib-node");
-const contract = require('../DEXpairContract.js'); //specify the path to the .js file
+const contract = require('./DEXpairContract.js'); //specify the path to the .js file
 const contractPackage = contract.package;
 const fs = require('fs');
 const pathJson = './DEXpairContract.json';
-const pathGiverJson = '../GiverContractNTD.json';
-const giver = require('../GiverContract.js');
+const pathGiverJson = './GiverContractNTD.json';
+const giver = require('./GiverContract.js');
 const giverabi = giver.package.abi;
 const rootTokenA = "0:bfd9c9f619b11ce1f3f9520af60dd64a5d4773116afab5e4fcd177208a9c7358";
 const rootTokenB = "0:95f08c717d720bd7fa626b064673f9544b47cef60657ea2e23966dfe6dd329c3";

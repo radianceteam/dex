@@ -1,5 +1,5 @@
 # sudo tondev sol DEXpair.sol -l js -L deploy
-## deployDEXpair.js & deployDEXpairR.js
+## deployDEXpair.js (for end deploy after 5 tons received use deployDEXpairR.js)
 ## getDEXpair.js
 # sudo tondev sol DEXclient.sol -l js -L deploy
 ## deployDEXclient.js for contract deploy
@@ -11,7 +11,7 @@
 ## depositDEXclient.js for deposit amount from client wallets A & B to pair deposit wallets A & B
 ## for check deposit wallets
 ### /tonos-cli run 0:5efec5250f20ec4d280bcaf3eb4ec6bcf1e5b01710b42f9ac18ecf9b338dacd5 getBalance {} --abi TONTokenWallet.abi
-###/tonos-cli run 0:a9fa2dbf5e9c9769b9c3f54dfb7fe500d5dad4516c5d7349d204e2e7e8406cbd getBalance {} --abi TONTokenWallet.abi
+### /tonos-cli run 0:a9fa2dbf5e9c9769b9c3f54dfb7fe500d5dad4516c5d7349d204e2e7e8406cbd getBalance {} --abi TONTokenWallet.abi
 ## processLDEXclient.js for process Liquidity 
 ## depositADEXclient.js for deposit amount from client wallets A to pair deposit wallets A
 ## swapADEXclient.js for swap A to B 

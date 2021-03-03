@@ -14,7 +14,7 @@ contract DEXroot {
         _;
     }
 
-    constructor(TvmCell m_DEXpairCode) public {
+    constructor(TvmCell DEXclientCode) public {
         tvm.accept();
         m_DEXclientCode = DEXclientCode;
     }

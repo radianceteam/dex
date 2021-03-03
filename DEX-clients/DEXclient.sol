@@ -60,7 +60,7 @@ contract DEXclient is IDEXclient {
 	uint128 tongrams1;
 	uint128 tongrams2;
 
-	uint128 constant PRICE_CONNECT_PAIR = 430000000;// 220000000;//110000000;// 3000000000;
+	uint128 constant PRICE_CONNECT_PAIR = 736000000;// 430000000;//110000000;// 3000000000;
 
 	modifier alwaysAccept {
 		tvm.accept();
@@ -190,8 +190,8 @@ contract DEXclient is IDEXclient {
 			address creator = rootAddr;
 			address owner = address(this);
 			uint256 ownerUINT = owner.value;
-			TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, 1000000000);	//1000000000
-			creator.transfer({value:2000000000, bounce:false, body:body});	//2000000000
+			TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, 1002500);	//1000000
+			creator.transfer({value:110001000, bounce:false, body:body});	//2000000000
 			createStatus = true;
 		}
 	}

@@ -29,4 +29,7 @@ DEXpair
 
 
 
-8 9 11 14 15 16 19
+
+
+../../../tonos-cli call 0:5b1058efc34fba3854256ad0ee88c7d899522ed84cc2a6fadb1c3d9e990cc0eb createPairClientWallets '{"pairAddr":"0:5f34bb2fc10b160b15b49c0adf7576d5a9a794b1f1c4237d18cfe34e4a6c0089"}' --sign ./DEXclientContract.keys.json --abi ../DEXclient.abi.json
+

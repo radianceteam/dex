@@ -61,14 +61,14 @@ contract DEXclient is IDEXclient {
 	mapping(address => Pair) pairs;
 	address[] pairKeys;
 
-	uint128 constant GRAMS_CONNECT_PAIR = 3000000000;
+	uint128 constant GRAMS_CONNECT_PAIR = 736000000; //3000000000; add Senitskiy
 	uint128 constant GRAMS_PROCESS_LIQUIDITY = 20000000;
 	uint128 constant GRAMS_PROCESS_SWAP = 20000000;
 	uint128 constant GRAMS_SENDTOKENS_TRANSMITER = 500000000;
 	uint128 constant GRAMS_SENDTOKENS_RECEIVER = 300000000;
-  uint128 constant GRAMS_PROCESS_RETURN = 220000000;
-	uint128 constant GRAMS_ROOT_CREATE = 160000000;
-	uint128 constant GRAMS_NEW_WALLET = 50000000;
+  	uint128 constant GRAMS_PROCESS_RETURN = 220000000;
+	uint128 constant GRAMS_ROOT_CREATE = 110001000; // 160000000; add Senitskiy
+	uint128 constant GRAMS_NEW_WALLET = 1002500; // 50000000; add Senitskiy
 	uint128 constant GRAMS_GET_BALANCE = 22000000;
 
 	modifier alwaysAccept {

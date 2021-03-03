@@ -18,3 +18,4 @@ pubkey генерируем ручками
 
 tonos-cli run 0:e20c66647b36e6d7f1ec6f79ec6fa3972aa35352bd110f2fadc32d3bf1c72715 getAddress {} --abi DEXroot.abi.json
 tonos-cli call 0:e20c66647b36e6d7f1ec6f79ec6fa3972aa35352bd110f2fadc32d3bf1c72715 deployNewDexClient '{"pukey":"0x2e38f2c96db23a48340a9dd7e6f73aec4f243d3127d6e172c6b19507cca60fe7"}' --abi DEXroot.abi.json --sign DEXroot.keys.json
+git checkout -b "draft_changes"

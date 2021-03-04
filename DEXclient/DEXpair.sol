@@ -81,6 +81,8 @@ contract DEXpair is IDEXpair {
 	uint128 constant GRAMS_CREATE_ROOT = 26000000; // 1000000000; add Senitskiy
 	uint128 constant GRAMS_CREATE_NEWWALLET = 10000; // 500000000; add Senitskiy
 	uint128 constant GRAMS_SETPAIR_DEXCLIENT = 5000000; // 200000000; add Senitskiy
+	uint128 constant GRAMS_CREATE_RESERVE_WALLET_1 = 1000000;
+	uint128 constant GRAMS_CREATE_RESERVE_WALLET_2 = 110000000;	
 
 
 
@@ -360,8 +362,8 @@ contract DEXpair is IDEXpair {
 		address creator = rootAddr;
 		address owner = address(this);
 		uint256 ownerUINT = owner.value;
-		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000b, 0, 0, ownerUINT, 1000000000);
-		creator.transfer({value:2000000000, bounce:false, body:body});
+		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000b, 0, 0, ownerUINT, GRAMS_CREATE_RESERVE_WALLET_1);
+		creator.transfer({value:GRAMS_CREATE_RESERVE_WALLET_2, bounce:false, body:body});
 		createStatus = true;
 	}
 

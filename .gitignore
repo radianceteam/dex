@@ -107,3 +107,5 @@ dist
 /tokens-fungible/
 /ignor/
 /DEX-clients/old*
+/DEXclient/DEX-client*
+/DEX-pair/

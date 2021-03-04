@@ -1,4 +1,4 @@
-pragma solidity >=0.6.0;
+pragma solidity >= 0.6.0;
 pragma AbiHeader expire;
 
 interface IRootTokenContract {
@@ -24,6 +24,10 @@ interface IDEXpair {
 	function setPairDepositWallet(address value0) external functionID(0x0000000a);
 	function setWalletBalance(uint128 value0) external functionID(0x00000006);
 	function setPairReserveWallet(address value0) external functionID(0x0000000b);
+	function processLiquidity(uint128 qtyA, uint128 qtyB, address returnAddrA, address returnAddrB) external functionID(0x00000011);
+	function processSwapA(uint128 qtyA, address returnAddrA, address returnAddrB) external functionID(0x00000012);
+	function processSwapB(uint128 qtyB, address returnAddrA, address returnAddrB) external functionID(0x00000021);
+	function returnDeposit(address returnAddrA, address returnAddrB) external functionID(0x00000018);
 }
 
 contract DEXclient is IDEXclient {
@@ -57,10 +61,15 @@ contract DEXclient is IDEXclient {
 	mapping(address => Pair) pairs;
 	address[] pairKeys;
 
-	uint128 tongrams1;
-	uint128 tongrams2;
-
-	uint128 constant PRICE_CONNECT_PAIR = 736000000;// 430000000;//110000000;// 3000000000;
+	uint128 constant GRAMS_CONNECT_PAIR = 736000000; //3000000000; add Senitskiy
+	uint128 constant GRAMS_PROCESS_LIQUIDITY = 20000000;
+	uint128 constant GRAMS_PROCESS_SWAP = 20000000;
+	uint128 constant GRAMS_SENDTOKENS_TRANSMITER = 500000000;
+	uint128 constant GRAMS_SENDTOKENS_RECEIVER = 300000000;
+  	uint128 constant GRAMS_PROCESS_RETURN = 220000000;
+	uint128 constant GRAMS_ROOT_CREATE = 110001000; // 160000000; add Senitskiy
+	uint128 constant GRAMS_NEW_WALLET = 1002500; // 50000000; add Senitskiy
+	uint128 constant GRAMS_GET_BALANCE = 22000000;
 
 	modifier alwaysAccept {
 		tvm.accept();
@@ -86,8 +95,35 @@ contract DEXclient is IDEXclient {
 	function connectPair(address pairAddr) public checkOwnerAndAccept view returns (bool statusConnection) {
 		statusConnection = false;
 		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).connect);
-		pairAddr.transfer({value:PRICE_CONNECT_PAIR, body:body});
+		pairAddr.transfer({value:GRAMS_CONNECT_PAIR, body:body});
 		statusConnection = true;
+	}
+
+	function createNewEmptyWallet(address rootAddr) private view alwaysAccept  returns (bool createStatus) {
+		createStatus = false;
+		if (!roots.exists(rootAddr)){
+			address creator = rootAddr;
+			address owner = address(this);
+			uint256 ownerUINT = owner.value;
+			TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, GRAMS_NEW_WALLET);
+			creator.transfer({value:GRAMS_ROOT_CREATE, bounce:false, body:body});
+			createStatus = true;
+		}
+	}
+
+	function setNewEmptyWallet(address value0) public override alwaysAccept functionID(0x00000007){
+		address root = msg.sender;
+		address wallet = value0;
+		if (!roots.exists(root)){
+			roots[root] = wallet;
+			rootKeys.push(root);
+			walletKeys.push(wallet);
+			Wallet wc = wallets[wallet];
+			wc.index = walletKeys.length;
+			wc.root = root;
+			wc.balance = 0;
+			wallets[wallet] = wc;
+		}
 	}
 
 	function setPair(address arg0, address arg1, address arg2, address arg3, address arg4, address arg5) public alwaysAccept override functionID(0x00000003) {
@@ -104,6 +140,8 @@ contract DEXclient is IDEXclient {
 			cp.pairWalletB = arg4;
 			cp.depositWalletB = arg5;
 			cp.allowanceB = 0;
+			createNewEmptyWallet(cp.rootA);
+			createNewEmptyWallet(cp.rootB);
 			pairs[dexpair] = cp;
 		}
 	}
@@ -122,7 +160,6 @@ contract DEXclient is IDEXclient {
 		pairs[dexpair] = cp;
 	}
 
-
 	function getPair(address value0) public view alwaysAccept returns (address pairRootA, address pairReserveA, address clientDepositA, uint128 clientAllowanceA, address pairRootB, address pairReserveB, address clientDepositB, uint128 clientAllowanceB) {
 		Pair cp = pairs[value0];
 		pairRootA = cp.rootA;
@@ -139,20 +176,19 @@ contract DEXclient is IDEXclient {
 		transmitter = from;
 		receiver = to;
 		body = tvm.encodeBody(ITONTokenWallet(transmitter).transfer, receiver, tokens, grams);
-		transmitter.transfer({value:20000000, body:body});	//20000000
+		transmitter.transfer({value:GRAMS_SENDTOKENS_TRANSMITER, body:body});
 	}
 
 	function sendTokens2(address from, address to, uint128 tokens, uint128 grams) public checkOwnerAndAccept returns (address transmitter, address receiver) {
 		transmitter = from;
 		receiver = to;
-		ITONTokenWallet(transmitter).transfer{value:20000000}(receiver, tokens, grams);//20000000
+		ITONTokenWallet(transmitter).transfer{value:GRAMS_SENDTOKENS_TRANSMITER}(receiver, tokens, grams);
 	}
-
 
 	function askBalanceToken(address walletAddr) public view checkOwnerAndAccept {
 		address transmitter = walletAddr;
 		TvmCell body = tvm.encodeBody(ITONTokenWallet(transmitter).getBalance_InternalOwner, 0x00000004);
-		transmitter.transfer({value:20000000, body:body});	//20000000
+		transmitter.transfer({value:GRAMS_GET_BALANCE, body:body});
 	}
 
 	function askBalanceAllTokens() public view checkOwnerAndAccept {
@@ -169,60 +205,33 @@ contract DEXclient is IDEXclient {
 		wallets[msg.sender] = wc;
 	}
 
-	function getWalletBalance(address walletAddr) public view alwaysAccept returns (uint128 walletBal) {
+	function getBalanceTokenWallet(address walletAddr) public view alwaysAccept returns (uint128 walletBal) {
 		Wallet wc = wallets[walletAddr];
 		walletBal = wc.balance;
 	}
 
-	function setTongrams(uint128 msgGramPrice1, uint128 msgGramPrice2) public alwaysAccept {
-		tongrams1 = msgGramPrice1;
-		tongrams2 = msgGramPrice2;
-	}
+	// function createPairClientWallets(address pairAddr) public view checkOwnerAndAccept returns (bool createStatusA, bool createStatusB) {
+	// 	createStatusA = false;
+	// 	createStatusB = false;
+	// 	Pair cp = pairs[pairAddr];
+	// 	if (!roots.exists(cp.rootA)&&!roots.exists(cp.rootB)){
+	// 		createNewEmptyWallet(cp.rootA);
+	// 		createStatusA = true;
+	// 		createNewEmptyWallet(cp.rootB);
+	// 		createStatusB = true;
+	// 	} else if (!roots.exists(cp.rootA)) {
+	// 		createNewEmptyWallet(cp.rootA);
+	// 		createStatusA = true;
+	// 	} else if (!roots.exists(cp.rootB)) {
+	// 		createNewEmptyWallet(cp.rootB);
+	// 		createStatusB = true;
+	// 	}
+	// }
 
-	function getTongrams() public view alwaysAccept returns (uint128 msgGramPrice1, uint128 msgGramPrice2){
-		msgGramPrice1 = tongrams1;
-		msgGramPrice2 = tongrams2;
-	}
-
-	function createNewEmptyWallet(address rootAddr) public view checkOwnerAndAccept  returns (bool createStatus) {
-		createStatus = false;
-		if (!roots.exists(rootAddr)){
-			address creator = rootAddr;
-			address owner = address(this);
-			uint256 ownerUINT = owner.value;
-			TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, 1002500);	//1000000
-			creator.transfer({value:110001000, bounce:false, body:body});	//2000000000
-			createStatus = true;
-		}
-	}
-
-	function setNewEmptyWallet(address value0) public override alwaysAccept functionID(0x00000007){
-		address root = msg.sender;
-		address wallet = value0;
-		roots[root] = wallet;
-		if (!roots.exists(root)){
-			rootKeys.push(root);
-			walletKeys.push(wallet);
-			Wallet wc = wallets[wallet];
-			wc.index = walletKeys.length;
-			wc.root = root;
-			wc.balance = 0;
-			wallets[wallet] = wc;
-		}
-	}
-
-	function createPairClientWallets(address pairAddr) public view checkOwnerAndAccept returns (bool createStatusA, bool createStatusB) {
-		createStatusA = false;
-		createStatusB = false;
+	function getPairClientWallets(address pairAddr) public view alwaysAccept returns (address walletA, address walletB){
 		Pair cp = pairs[pairAddr];
-		if (!roots.exists(cp.rootA)){createNewEmptyWallet(cp.rootA);createStatusA = true;}
-		if (!roots.exists(cp.rootB)){createNewEmptyWallet(cp.rootB);createStatusB = true;}
-	}
-
-	function getPairClientWallets(address pairAddr) public view alwaysAccept returns (address clientWalletA, address clientWalletB){
-		Pair cp = pairs[pairAddr];
-		clientWalletA = roots[cp.rootA];
-		clientWalletB = roots[cp.rootB];
+		walletA = roots[cp.rootA];
+		walletB = roots[cp.rootB];
 	}
 
 	function askPairWalletsBalance(address pairAddr) public view checkOwnerAndAccept {
@@ -231,10 +240,10 @@ contract DEXclient is IDEXclient {
 		askBalanceToken(roots[cp.rootB]);
 	}
 
-	function getPairWalletsBalance(address pairAddr) public view alwaysAccept returns (uint128 balanceClientWalletA, uint128 balanceClientWalletB) {
+	function getPairWalletsBalance(address pairAddr) public view alwaysAccept returns (uint128 balanceWalletA, uint128 balanceWalletB) {
 		Pair cp = pairs[pairAddr];
-		balanceClientWalletA = getWalletBalance(roots[cp.rootA]);
-		balanceClientWalletB = getWalletBalance(roots[cp.rootB]);
+		balanceWalletA = getBalanceTokenWallet(roots[cp.rootA]);
+		balanceWalletB = getBalanceTokenWallet(roots[cp.rootB]);
 	}
 
 	function showContractAddress() public pure alwaysAccept returns (address dexclient, uint256 dexclientUINT256){
@@ -242,16 +251,73 @@ contract DEXclient is IDEXclient {
 		dexclientUINT256 = dexclient.value;
 	}
 
-	// function step1ToPairProvider(address pairAddr, uint128 qtyA) public view checkOwnerAndAccept returns (bool status) {
-	// 	status = false;
-	// 	Pair cp = pairs[pairAddr];
-	//
-	// }
+	function makeABdepositToPair(address pairAddr, uint128 qtyA, uint128 qtyB) public view checkOwnerAndAccept returns (bool makeDepositStatus) {
+		makeDepositStatus = false;
+		require(pairs.exists(pairAddr), 102);
+		Pair cp = pairs[pairAddr];
+		require(cp.rootA != address(0) && cp.depositWalletA != address(0), 104);
+		require(cp.rootB != address(0) && cp.depositWalletB != address(0), 105);
+		sendTokens(roots[cp.rootA], cp.depositWalletA, qtyA, GRAMS_SENDTOKENS_RECEIVER);
+		sendTokens(roots[cp.rootB], cp.depositWalletB, qtyB, GRAMS_SENDTOKENS_RECEIVER);
+		makeDepositStatus = true;
+	}
 
+	function makeAdepositToPair(address pairAddr, uint128 qtyA) public view checkOwnerAndAccept returns (bool makeDepositStatus) {
+		makeDepositStatus = false;
+		require(pairs.exists(pairAddr), 102);
+		Pair cp = pairs[pairAddr];
+		require(cp.rootA != address(0) && cp.depositWalletA != address(0), 104);
+		sendTokens(roots[cp.rootA], cp.depositWalletA, qtyA, GRAMS_SENDTOKENS_RECEIVER);
+		makeDepositStatus = true;
+	}
 
+	function makeBdepositToPair(address pairAddr, uint128 qtyB) public view checkOwnerAndAccept returns (bool makeDepositStatus) {
+		makeDepositStatus = false;
+		require(pairs.exists(pairAddr), 102);
+		Pair cp = pairs[pairAddr];
+		require(cp.rootB != address(0) && cp.depositWalletB != address(0), 105);
+		sendTokens(roots[cp.rootB], cp.depositWalletB, qtyB, GRAMS_SENDTOKENS_RECEIVER);
+		makeDepositStatus = true;
+	}
 
+	function returnDepositFromPair(address pairAddr) public view checkOwnerAndAccept returns (bool returnDepositStatus) {
+		returnDepositStatus = false;
+		require(pairs.exists(pairAddr), 102);
+		Pair cp = pairs[pairAddr];
+		require(roots.exists(cp.rootA) && roots.exists(cp.rootB), 103);
+		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).returnDeposit, roots[cp.rootA], roots[cp.rootB]);
+		pairAddr.transfer({value:GRAMS_PROCESS_RETURN, body:body});
+		returnDepositStatus = true;
+	}
 
+	function processLiquidity(address pairAddr, uint128 qtyA, uint128 qtyB) public view checkOwnerAndAccept returns (bool processLiquidityStatus) {
+    processLiquidityStatus = false;
+		require(pairs.exists(pairAddr), 102);
+		Pair cp = pairs[pairAddr];
+		require(roots.exists(cp.rootA) && roots.exists(cp.rootB), 103);
+		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).processLiquidity, qtyA, qtyB, roots[cp.rootA], roots[cp.rootB]);
+		pairAddr.transfer({value:GRAMS_PROCESS_LIQUIDITY, body:body});
+		processLiquidityStatus = true;
+	}
 
+	function processSwapA(address pairAddr, uint128 qtyA) public view checkOwnerAndAccept returns (bool processSwapStatus) {
+		processSwapStatus = false;
+		require(pairs.exists(pairAddr), 102);
+		Pair cp = pairs[pairAddr];
+		require(roots.exists(cp.rootA) && roots.exists(cp.rootB), 103);
+		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).processSwapA, qtyA, roots[cp.rootA], roots[cp.rootB]);
+		pairAddr.transfer({value:GRAMS_PROCESS_SWAP, body:body});
+		processSwapStatus = true;
+	}
 
+	function processSwapB(address pairAddr, uint128 qtyB) public view checkOwnerAndAccept returns (bool processSwapStatus) {
+		processSwapStatus = false;
+		require(pairs.exists(pairAddr), 102);
+		Pair cp = pairs[pairAddr];
+		require(roots.exists(cp.rootA) && roots.exists(cp.rootB), 103);
+		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).processSwapB, qtyB, roots[cp.rootA], roots[cp.rootB]);
+		pairAddr.transfer({value:GRAMS_PROCESS_SWAP, body:body});
+		processSwapStatus = true;
+	}
 
 }

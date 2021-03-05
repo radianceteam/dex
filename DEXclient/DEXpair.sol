@@ -750,7 +750,7 @@ contract DEXpair is IDEXpair {
 				} else {
 				        balanceReserve[reserveA] += addReserveA;
 					balanceReserve[reserveB] -= exchangeB;
-					processTokens(cc.walletA, reserveA, ramountA, GRAMS_SENDTOKENS_RECEIVER);
+					processTokens(cc.walletA, reserveA, addReserveA, GRAMS_SENDTOKENS_RECEIVER);
 					processTokens(reserveB, cc.returnAddrB, exchangeB, GRAMS_SENDTOKENS_RECEIVER);					
 					cc.qtyA = 0;
 					cc.qtyB = 0;
@@ -800,21 +800,21 @@ contract DEXpair is IDEXpair {
 			uint128 addReserveB = exchangeB + providersFeeB;
 			uint128 unusedReturnB = ramountB - addReserveB;
 			if (exchangeA > 0 && exchangeB > 0) {
-				if (unusedReturnB > 0) {					
+				if (unusedReturnB > 0) {
+				        balanceReserve[reserveB] += addReserveB;
+					balanceReserve[reserveA] -= exchangeA;
 					processTokens(cc.walletB, reserveB, addReserveB, GRAMS_SENDTOKENS_RECEIVER);
 					processTokens(reserveA, cc.returnAddrA, exchangeA, GRAMS_SENDTOKENS_RECEIVER);
 					processTokens(cc.walletB, cc.returnAddrB, unusedReturnB, GRAMS_SENDTOKENS_RECEIVER);
-					balanceReserve[reserveB] += ramountB;
-					balanceReserve[reserveA] -= exchangeA;
 					cc.qtyA = 0;
 					cc.qtyB = 0;
 					cc.status = 0;
 					dexpairclients[dexclient] = cc;
 				} else {
-					processTokens(cc.walletB, reserveB, ramountB, GRAMS_SENDTOKENS_RECEIVER);
-					processTokens(reserveA, cc.returnAddrA, exchangeA, GRAMS_SENDTOKENS_RECEIVER);
-					balanceReserve[reserveB] += ramountB;
+				        balanceReserve[reserveB] += addReserveB;
 					balanceReserve[reserveA] -= exchangeA;
+					processTokens(cc.walletB, reserveB, addReserveB, GRAMS_SENDTOKENS_RECEIVER);
+					processTokens(reserveA, cc.returnAddrA, exchangeA, GRAMS_SENDTOKENS_RECEIVER);
 					cc.qtyA = 0;
 					cc.qtyB = 0;
 					cc.status = 0;

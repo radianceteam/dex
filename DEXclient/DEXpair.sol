@@ -166,7 +166,6 @@ contract DEXpair is IDEXpair {
 	function connect() public alwaysAccept override functionID(0x00000005) {
 		address dexclient = msg.sender;
 		if (!dexpairclients.exists(dexclient)){
-
 		dexpairclientKeys.push(dexclient);
 		addDEXclientToQueueA(dexclient);
 		addDEXclientToQueueB(dexclient);
@@ -180,7 +179,6 @@ contract DEXpair is IDEXpair {
 		dexpairclients[dexclient] = cc;
 		TvmCell body = tvm.encodeBody(IDEXclient(dexclient).setPair, rootA, reserveA, address(0), rootB, reserveB, address(0));
 		dexclient.transfer({value:GRAMS_SETPAIR_DEXCLIENT, body:body});
-
 	}
 
 
@@ -736,12 +734,13 @@ contract DEXpair is IDEXpair {
 			uint128 crremainder = getRemainder(crmin, crmax);
       uint128 exchangeB = (currentReserveA < currentReserveB)?exchangeA * crquotient + math.muldiv(exchangeA,crremainder,crmin):math.muldiv(exchangeA,crmin,crmax);
       exchangeA = (currentReserveA < currentReserveB)?exchangeA:exchangeB * crquotient + math.muldiv(exchangeB,crremainder,crmin);
-			uint128 unusedReturnA = cc.qtyA - exchangeA + providersFeeA;
+                        uint128 addReserveA = exchangeA + providersFeeA;
+			uint128 unusedReturnA = ramountA - addReserveA;
 			if (exchangeA > 0 && exchangeB > 0) {
 				if (unusedReturnA > 0) {
-					processTokens(cc.walletA, cc.returnAddrA, unusedReturnA, GRAMS_SENDTOKENS_RECEIVER);
-					processTokens(cc.walletA, reserveA, ramountA, GRAMS_SENDTOKENS_RECEIVER);
+					processTokens(cc.walletA, reserveA, addReserveA, GRAMS_SENDTOKENS_RECEIVER);
 					processTokens(reserveB, cc.returnAddrB, exchangeB, GRAMS_SENDTOKENS_RECEIVER);
+					processTokens(cc.walletA, cc.returnAddrA, unusedReturnA, GRAMS_SENDTOKENS_RECEIVER);
 					balanceReserve[reserveA] += ramountA;
 					balanceReserve[reserveB] -= exchangeB;
 					cc.qtyA = 0;
@@ -798,12 +797,13 @@ contract DEXpair is IDEXpair {
 			uint128 crremainder = getRemainder(crmin, crmax);
 			uint128 exchangeA = (currentReserveB < currentReserveA)?exchangeB * crquotient + math.muldiv(exchangeB,crremainder,crmin):math.muldiv(exchangeB,crmin,crmax);
 			exchangeB = (currentReserveB < currentReserveA)?exchangeB:exchangeA * crquotient + math.muldiv(exchangeA,crremainder,crmin);
-			uint128 unusedReturnB = cc.qtyB - exchangeB + providersFeeB;
+			uint128 addReserveB = exchangeB + providersFeeB;
+			uint128 unusedReturnB = ramountB - addReserveB;
 			if (exchangeA > 0 && exchangeB > 0) {
-				if (unusedReturnB > 0) {
-					processTokens(cc.walletB, cc.returnAddrB, unusedReturnB, GRAMS_SENDTOKENS_RECEIVER);
-					processTokens(cc.walletB, reserveB, ramountB, GRAMS_SENDTOKENS_RECEIVER);
+				if (unusedReturnB > 0) {					
+					processTokens(cc.walletB, reserveB, addReserveB, GRAMS_SENDTOKENS_RECEIVER);
 					processTokens(reserveA, cc.returnAddrA, exchangeA, GRAMS_SENDTOKENS_RECEIVER);
+					processTokens(cc.walletB, cc.returnAddrB, unusedReturnB, GRAMS_SENDTOKENS_RECEIVER);
 					balanceReserve[reserveB] += ramountB;
 					balanceReserve[reserveA] -= exchangeA;
 					cc.qtyA = 0;

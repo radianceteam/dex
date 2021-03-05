@@ -109,3 +109,4 @@ dist
 /DEX-clients/old*
 /DEXclient/DEX-client*
 /DEX-pair/
+/DEXclient/DEX-client-*

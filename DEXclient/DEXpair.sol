@@ -732,26 +732,26 @@ contract DEXpair is IDEXpair {
 			uint128 crmax = math.max(currentReserveA, currentReserveB);
 			uint128 crquotient = getQuotient(crmin, crmax);
 			uint128 crremainder = getRemainder(crmin, crmax);
-      uint128 exchangeB = (currentReserveA < currentReserveB)?exchangeA * crquotient + math.muldiv(exchangeA,crremainder,crmin):math.muldiv(exchangeA,crmin,crmax);
-      exchangeA = (currentReserveA < currentReserveB)?exchangeA:exchangeB * crquotient + math.muldiv(exchangeB,crremainder,crmin);
+                        uint128 exchangeB = (currentReserveA < currentReserveB)?exchangeA * crquotient + math.muldiv(exchangeA,crremainder,crmin):math.muldiv(exchangeA,crmin,crmax);
+                        exchangeA = (currentReserveA < currentReserveB)?exchangeA:exchangeB * crquotient + math.muldiv(exchangeB,crremainder,crmin);
                         uint128 addReserveA = exchangeA + providersFeeA;
 			uint128 unusedReturnA = ramountA - addReserveA;
 			if (exchangeA > 0 && exchangeB > 0) {
-				if (unusedReturnA > 0) {
+				if (unusedReturnA > 0) {					
+					balanceReserve[reserveA] += addReserveA;
+					balanceReserve[reserveB] -= exchangeB;
 					processTokens(cc.walletA, reserveA, addReserveA, GRAMS_SENDTOKENS_RECEIVER);
 					processTokens(reserveB, cc.returnAddrB, exchangeB, GRAMS_SENDTOKENS_RECEIVER);
 					processTokens(cc.walletA, cc.returnAddrA, unusedReturnA, GRAMS_SENDTOKENS_RECEIVER);
-					balanceReserve[reserveA] += ramountA;
-					balanceReserve[reserveB] -= exchangeB;
 					cc.qtyA = 0;
 					cc.qtyB = 0;
 					cc.status = 0;
 					dexpairclients[dexclient] = cc;
 				} else {
-					processTokens(cc.walletA, reserveA, ramountA, GRAMS_SENDTOKENS_RECEIVER);
-					processTokens(reserveB, cc.returnAddrB, exchangeB, GRAMS_SENDTOKENS_RECEIVER);
-					balanceReserve[reserveA] += ramountA;
+				        balanceReserve[reserveA] += addReserveA;
 					balanceReserve[reserveB] -= exchangeB;
+					processTokens(cc.walletA, reserveA, ramountA, GRAMS_SENDTOKENS_RECEIVER);
+					processTokens(reserveB, cc.returnAddrB, exchangeB, GRAMS_SENDTOKENS_RECEIVER);					
 					cc.qtyA = 0;
 					cc.qtyB = 0;
 					cc.status = 0;

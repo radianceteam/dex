@@ -16,7 +16,6 @@ interface IDEXclient {
 	function setNewEmptyWallet(address value0) external functionID(0x00000007);
 	function setPairDepositA(address arg0) external functionID(0x00000008);
 	function setPairDepositB(address arg0) external functionID(0x00000009);
-
 }
 
 interface IDEXpair {
@@ -28,6 +27,7 @@ interface IDEXpair {
 	function processSwapA(uint128 qtyA, address returnAddrA, address returnAddrB) external functionID(0x00000012);
 	function processSwapB(uint128 qtyB, address returnAddrA, address returnAddrB) external functionID(0x00000021);
 	function returnDeposit(address returnAddrA, address returnAddrB) external functionID(0x00000018);
+	function returnAllLiquidity() external functionID(0x00000019);
 }
 
 contract DEXclient is IDEXclient {
@@ -61,16 +61,18 @@ contract DEXclient is IDEXclient {
 	mapping(address => Pair) pairs;
 	address[] pairKeys;
 
-	uint128 constant GRAMS_CONNECT_PAIR = 736000000; //3000000000; add Senitskiy
+	// Grams constants
+	uint128 constant GRAMS_CONNECT_PAIR = 2200000000;
 	uint128 constant GRAMS_PROCESS_LIQUIDITY = 20000000;
 	uint128 constant GRAMS_PROCESS_SWAP = 20000000;
 	uint128 constant GRAMS_SENDTOKENS_TRANSMITER = 500000000;
 	uint128 constant GRAMS_SENDTOKENS_RECEIVER = 300000000;
-  	uint128 constant GRAMS_PROCESS_RETURN = 220000000;
-	uint128 constant GRAMS_ROOT_CREATE = 110001000; // 160000000; add Senitskiy
-	uint128 constant GRAMS_NEW_WALLET = 1002500; // 50000000; add Senitskiy
+	uint128 constant GRAMS_PROCESS_RETURN = 220000000;
+	uint128 constant GRAMS_ROOT_CREATE = 160000000;
+	uint128 constant GRAMS_NEW_WALLET = 50000000;
 	uint128 constant GRAMS_GET_BALANCE = 22000000;
 
+	// Modifier that allows public function to accept external calls always.
 	modifier alwaysAccept {
 		tvm.accept();
 		_;
@@ -210,24 +212,6 @@ contract DEXclient is IDEXclient {
 		walletBal = wc.balance;
 	}
 
-	// function createPairClientWallets(address pairAddr) public view checkOwnerAndAccept returns (bool createStatusA, bool createStatusB) {
-	// 	createStatusA = false;
-	// 	createStatusB = false;
-	// 	Pair cp = pairs[pairAddr];
-	// 	if (!roots.exists(cp.rootA)&&!roots.exists(cp.rootB)){
-	// 		createNewEmptyWallet(cp.rootA);
-	// 		createStatusA = true;
-	// 		createNewEmptyWallet(cp.rootB);
-	// 		createStatusB = true;
-	// 	} else if (!roots.exists(cp.rootA)) {
-	// 		createNewEmptyWallet(cp.rootA);
-	// 		createStatusA = true;
-	// 	} else if (!roots.exists(cp.rootB)) {
-	// 		createNewEmptyWallet(cp.rootB);
-	// 		createStatusB = true;
-	// 	}
-	// }
-
 	function getPairClientWallets(address pairAddr) public view alwaysAccept returns (address walletA, address walletB){
 		Pair cp = pairs[pairAddr];
 		walletA = roots[cp.rootA];
@@ -244,6 +228,11 @@ contract DEXclient is IDEXclient {
 		Pair cp = pairs[pairAddr];
 		balanceWalletA = getBalanceTokenWallet(roots[cp.rootA]);
 		balanceWalletB = getBalanceTokenWallet(roots[cp.rootB]);
+	}
+
+	function getAllDataPreparation() public view alwaysAccept returns(address[] pairKeysR, address[] walletKeysR){
+		pairKeysR = pairKeys;
+		walletKeysR = walletKeys;
 	}
 
 	function showContractAddress() public pure alwaysAccept returns (address dexclient, uint256 dexclientUINT256){
@@ -291,13 +280,23 @@ contract DEXclient is IDEXclient {
 	}
 
 	function processLiquidity(address pairAddr, uint128 qtyA, uint128 qtyB) public view checkOwnerAndAccept returns (bool processLiquidityStatus) {
-    processLiquidityStatus = false;
+		processLiquidityStatus = false;
 		require(pairs.exists(pairAddr), 102);
 		Pair cp = pairs[pairAddr];
 		require(roots.exists(cp.rootA) && roots.exists(cp.rootB), 103);
 		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).processLiquidity, qtyA, qtyB, roots[cp.rootA], roots[cp.rootB]);
 		pairAddr.transfer({value:GRAMS_PROCESS_LIQUIDITY, body:body});
 		processLiquidityStatus = true;
+	}
+
+	function returnAllLiquidity(address pairAddr) public view checkOwnerAndAccept returns (bool returnLiquidityStatus) {
+		returnLiquidityStatus = false;
+		require(pairs.exists(pairAddr), 102);
+		Pair cp = pairs[pairAddr];
+		require(roots.exists(cp.rootA) && roots.exists(cp.rootB), 103);
+		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).returnAllLiquidity);
+		pairAddr.transfer({value:GRAMS_PROCESS_LIQUIDITY, body:body});
+		returnLiquidityStatus = true;
 	}
 
 	function processSwapA(address pairAddr, uint128 qtyA) public view checkOwnerAndAccept returns (bool processSwapStatus) {

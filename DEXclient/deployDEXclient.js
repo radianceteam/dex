@@ -55,7 +55,7 @@ async function main(client) {
         function_name: 'sendTransaction',
         input: {
           dest: address,
-          value: 5000000000,
+          value: 10000000000,
           bounce: false,
         }
       },

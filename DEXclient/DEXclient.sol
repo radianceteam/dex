@@ -62,14 +62,14 @@ contract DEXclient is IDEXclient {
 	address[] pairKeys;
 
 	// Grams constants
-	uint128 constant GRAMS_CONNECT_PAIR = 2200000000;
+	uint128 constant GRAMS_CONNECT_PAIR = 2200000000;	//add Senitskiy 736000000
 	uint128 constant GRAMS_PROCESS_LIQUIDITY = 20000000;
 	uint128 constant GRAMS_PROCESS_SWAP = 20000000;
 	uint128 constant GRAMS_SENDTOKENS_TRANSMITER = 500000000;
 	uint128 constant GRAMS_SENDTOKENS_RECEIVER = 300000000;
-	uint128 constant GRAMS_PROCESS_RETURN = 220000000;
-	uint128 constant GRAMS_ROOT_CREATE = 160000000;
-	uint128 constant GRAMS_NEW_WALLET = 50000000;
+  	uint128 constant GRAMS_PROCESS_RETURN = 220000000;
+	uint128 constant GRAMS_ROOT_CREATE = 160000000; // 160000000; add Senitskiy 110001000
+	uint128 constant GRAMS_NEW_WALLET = 50000000; // 50000000; add Senitskiy 1002500
 	uint128 constant GRAMS_GET_BALANCE = 22000000;
 
 	// Modifier that allows public function to accept external calls always.

@@ -211,6 +211,31 @@ async function main(client) {
                                 response = await client.tvm.run_tvm(paramsOfRunTvm);
                                 console.log('Contract reacted to your getShareReserveProvider:', response.decoded.output);
 
+                                resultQC = await client.net.query_collection({
+                                  collection: 'accounts',
+                                  filter: { id: { eq: contractAddress } },
+                                  result: 'boc'
+                                });
+                                paramsOfEncodeMessage = {
+                                  abi: abi,
+                                  address: contractAddress,
+                                  call_set: {
+                                    function_name: 'getBalanceTONgrams',
+                                    input: {}
+                                  },
+                                  signer: { type: 'None' },
+                                };
+
+                                resultEM = await client.abi.encode_message(paramsOfEncodeMessage);
+                                paramsOfRunTvm = {
+                                  message: resultEM.message,
+                                  account: resultQC.result[0].boc,
+                                  abi: abi,
+                                };
+
+                                response = await client.tvm.run_tvm(paramsOfRunTvm);
+                                console.log('Contract reacted to your getBalanceTONgrams:', response.decoded.output);
+
 
 
 

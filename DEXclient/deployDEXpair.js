@@ -7,8 +7,8 @@ const pathJson = './DEXpairContract.json';
 const pathGiverJson = './GiverContractNTD.json';
 const giver = require('./GiverContract.js');
 const giverabi = giver.package.abi;
-const rootTokenA = "0:bfd9c9f619b11ce1f3f9520af60dd64a5d4773116afab5e4fcd177208a9c7358";
-const rootTokenB = "0:95f08c717d720bd7fa626b064673f9544b47cef60657ea2e23966dfe6dd329c3";
+const rootTokenA = "0:4f3c1b7a7eda40b7ae2de8033f119f18bde059ee3e2e367858845316340dfc97";
+const rootTokenB = "0:bfd9c9f619b11ce1f3f9520af60dd64a5d4773116afab5e4fcd177208a9c7358";
 
 async function main(client) {
   const abi = {
@@ -41,7 +41,7 @@ async function main(client) {
 
   let contractJson = JSON.stringify({address:address, keys:contractKeys});
   // fs.writeFileSync( pathJson, contractJson,{flag:'a+'});   //'a+' is append mode
-  fs.writeFileSync( pathJson, contractJson,{flag:'w'}); 
+  fs.writeFileSync( pathJson, contractJson,{flag:'w'});
 
   console.log("Future address of the contract  and keys written successfully to:", pathJson);
 
@@ -72,7 +72,7 @@ async function main(client) {
     }
 
     let response = await client.processing.process_message(getFromGiver);
-    console.log('5 Tons were transfered from giver to: ', address,', tx id: ', response.transaction.id);
+    console.log('10 Tons were transfered from giver to: ', address,', tx id: ', response.transaction.id);
 
     await client.processing.process_message({
       send_events: false,

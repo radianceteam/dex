@@ -79,21 +79,12 @@ contract DEXpair is IDEXpair {
 	// Grams constants
 	uint128 constant GRAMS_CHECK_BALANCE = 22000000;
 	uint128 constant GRAMS_SENDTOKENS_TRANSMITER = 500000000;
-	// uint128 constant GRAMS_SENDTOKENS_TRANSMITER_1 = 510000000;
-	// uint128 constant GRAMS_SENDTOKENS_TRANSMITER_2 = 520000000;
-	// uint128 constant GRAMS_SENDTOKENS_TRANSMITER_3 = 10000000;	// 530000000
-	// uint128 constant GRAMS_CREATE_ROOT = 500000000; // 1000000000; add Senitskiy 35000000
-	// uint128 constant GRAMS_CREATE_NEWWALLET = 10000000; // 500000000; add Senitskiy 10000000	//10000
-	// uint128 constant GRAMS_SETPAIR_DEXCLIENT = 200000000; // 200000000; add Senitskiy 5000000
-	// uint128 constant GRAMS_CREATE_RESERVE_WALLET_1 = 1000000;
-	// uint128 constant GRAMS_CREATE_RESERVE_WALLET_2 = 130000000;	// 110000000
 	uint128 constant GRAMS_SENDTOKENS_RECEIVER = 300000000;
 	uint128 constant GRAMS_CREATE_ROOT = 1000000000;
 	uint128 constant GRAMS_CREATE_NEWWALLET = 500000000;
 	uint128 constant GRAMS_SETPAIR_DEXCLIENT = 200000000;
 	uint128 constant GRAMS_CREATERESERVEWALLET_ROOT = 1000000000;
 	uint128 constant GRAMS_CREATERESERVEWALLET_NEWWALLET = 500000000;
-
 
 	modifier alwaysAccept {
 		tvm.accept();
@@ -430,6 +421,7 @@ contract DEXpair is IDEXpair {
 
 	// Function to start process of add liquidity to DEX pair reserve
 	function processLiquidity(uint128 qtyA, uint128 qtyB, address returnAddrA, address returnAddrB) public onlyConnectedDEXclient override functionID(0x00000011) {
+		require(!(address(this).balance < 2), 105);
 		address dexclient = msg.sender;
 		Client cc = dexpairclients[dexclient];
 		require(cc.status == 0, 104);
@@ -820,15 +812,20 @@ contract DEXpair is IDEXpair {
 		}
 	}
 
-	// Function to reset DEXclient processStatus. Only by owner
-	function resetStatus(address dexclient) public checkOwnerAndAccept returns (bool){
-		Client cc = dexpairclients[dexclient];
-		cc.qtyA = 0;
-		cc.qtyB = 0;
-		cc.status = 0;
-		bool status = (cc.status == 0);
-		dexpairclients[dexclient] = cc;
-		return status;
+	// Dev function to reset DEXclient processStatus. Only by owner
+	// function resetStatus(address dexclient) public checkOwnerAndAccept returns (bool){
+	// 	Client cc = dexpairclients[dexclient];
+	// 	cc.qtyA = 0;
+	// 	cc.qtyB = 0;
+	// 	cc.status = 0;
+	// 	bool status = (cc.status == 0);
+	// 	dexpairclients[dexclient] = cc;
+	// 	return status;
+	// }
+
+	// Function to get balance TONgrams for DEXpair.
+	function getBalanceTONgrams() public pure alwaysAccept returns (uint128 balanceTONgrams){
+		return address(this).balance;
 	}
 
 }

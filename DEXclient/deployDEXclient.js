@@ -66,7 +66,7 @@ async function main(client) {
     }
 
     let response = await client.processing.process_message(getFromGiver);
-    console.log('5 Tons were transfered from giver to: ', address,', tx id: ', response.transaction.id);
+    console.log('10 Tons were transfered from giver to: ', address,', tx id: ', response.transaction.id);
 
     await client.processing.process_message({
       send_events: false,

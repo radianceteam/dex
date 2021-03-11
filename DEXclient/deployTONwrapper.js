@@ -1,22 +1,19 @@
 const {TonClient} = require("@tonclient/core");
 const {libNode} = require("@tonclient/lib-node");
-const contract = require('./DEXclientContract.js'); //specify the path to the .js file
+const contract = require('./TONwrapperContract.js'); //specify the path to the .js file
 const contractPackage = contract.package;
 const fs = require('fs');
-const pathJson = './DEXclientContract.json';
+const pathJson = './TONwrapperContract.json';
 const pathGiverJson = './GiverContractNTD.json';
 const giver = require('./GiverContract.js');
 const giverabi = giver.package.abi;
 
 async function main(client) {
-  const contractJson = fs.readFileSync(pathJson,{encoding: "utf8"});
-  const contractData = JSON.parse(contractJson);
-  const contractAddress = contractData.address;
-  const contractKeys = contractData.keys;
   const abi = {
     type: 'Contract',
     value: contract.package.abi
   }
+  const contractKeys = await client.crypto.generate_random_sign_keys();
 
   const deployOptions = {
     abi,
@@ -41,6 +38,35 @@ async function main(client) {
   // fs.writeFileSync( pathJson, contractJson,{flag:'a+'});   //'a+' is append mode
   fs.writeFileSync( pathJson, contractJson,{flag:'w'});
   console.log("Future address of the contract  and keys written successfully to:", pathJson);
+
+  const giverJson = fs.readFileSync(pathGiverJson,{encoding: "utf8"});
+  const giverData = JSON.parse(giverJson);
+  const giverAddress = giverData.address;
+  const giverKeys = giverData.keys;
+  const getFromGiver = {
+    send_events: false,
+    message_encode_params: {
+      address: giverAddress,
+      abi: {
+        type: 'Contract',
+        value: giverabi,
+      },
+      call_set: {
+        function_name: 'sendTransaction',
+        input: {
+          dest: address,
+          value: 10000000000,
+          bounce: false,
+        }
+      },
+      signer: {
+        type: 'Keys',
+        keys: giverKeys }
+      }
+    }
+
+    let response = await client.processing.process_message(getFromGiver);
+    console.log('10 Tons were transfered from giver to: ', address,', tx id: ', response.transaction.id);
 
     await client.processing.process_message({
       send_events: false,

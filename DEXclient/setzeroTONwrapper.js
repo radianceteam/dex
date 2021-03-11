@@ -1,11 +1,9 @@
 const {TonClient} = require("@tonclient/core");
 const {libNode} = require("@tonclient/lib-node");
-const contract = require('./DEXpairContract.js'); //specify the path to the .js file
+const contract = require('./TONwrapperContract.js'); //specify the path to the .js file
 const contractPackage = contract.package;
 const fs = require('fs');
-const pathJson = './DEXpairContract.json';
-const pathJsonClient = './DEXclientContract.json';
-
+const pathJson = './TONwrapperContract.json';
 
 async function main(client) {
   try{
@@ -17,9 +15,6 @@ async function main(client) {
       type: 'Contract',
       value: contract.package.abi
     };
-    const cllientJson = fs.readFileSync(pathJsonClient,{encoding: "utf8"});
-    const clientData = JSON.parse(cllientJson);
-    const clientAddress = clientData.address;
 
     const params = {
       send_events: false,
@@ -30,10 +25,8 @@ async function main(client) {
           value: contract.package.abi
         },
         call_set: {
-          function_name: 'resetStatus',
-          input: {
-            dexclient: clientAddress,
-          }
+          function_name: 'createZeroWallet',
+          input: {}
         },
         signer: {
           type: 'Keys',
@@ -42,8 +35,9 @@ async function main(client) {
       }
 
       let response = await client.processing.process_message(params);
-      console.log('Your resetStatus proceed. Tx id: ', response.transaction.id);
-      console.log('Your resetStatus output: ', response.decoded.output);
+      console.log('Your createZeroWallet proceed. Tx id: ', response.transaction.id);
+      console.log('Your createZeroWallet output: ', response.decoded.output);
+
 
     }catch(err){
       console.log(err);
@@ -58,7 +52,7 @@ async function main(client) {
           server_address: 'net.ton.dev'
         }
       });
-      console.log("Hello net.ton.dev!");
+      console.log("Hello net.ton.dev TON!");
       await main(client);
       process.exit(0);
     } catch (error) {

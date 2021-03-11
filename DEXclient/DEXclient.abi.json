@@ -3,6 +3,13 @@
 	"header": ["time", "expire"],
 	"functions": [
 		{
+			"name": "constructor",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
 			"name": "sendTransfer",
 			"inputs": [
 				{"name":"dest","type":"address"},
@@ -22,12 +29,30 @@
 			]
 		},
 		{
+			"name": "createNewEmptyWalletByOwner",
+			"inputs": [
+				{"name":"rootAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"createStatus","type":"bool"}
+			]
+		},
+		{
 			"name": "setNewEmptyWallet",
 			"id": "0x7",
 			"inputs": [
 				{"name":"value0","type":"address"}
 			],
 			"outputs": [
+			]
+		},
+		{
+			"name": "getWalletByRoot",
+			"inputs": [
+				{"name":"rootAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"wallet","type":"address"}
 			]
 		},
 		{
@@ -54,15 +79,6 @@
 			]
 		},
 		{
-			"name": "setPairDepositB",
-			"id": "0x9",
-			"inputs": [
-				{"name":"arg0","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "getPair",
 			"inputs": [
 				{"name":"value0","type":"address"}
@@ -76,6 +92,15 @@
 				{"name":"pairReserveB","type":"address"},
 				{"name":"clientDepositB","type":"address"},
 				{"name":"clientAllowanceB","type":"uint128"}
+			]
+		},
+		{
+			"name": "setPairDepositB",
+			"id": "0x9",
+			"inputs": [
+				{"name":"arg0","type":"address"}
+			],
+			"outputs": [
 			]
 		},
 		{
@@ -265,8 +290,45 @@
 			]
 		},
 		{
-			"name": "constructor",
+			"name": "getBalanceTONgrams",
 			"inputs": [
+			],
+			"outputs": [
+				{"name":"balanceTONgrams","type":"uint128"}
+			]
+		},
+		{
+			"name": "setWrapper",
+			"id": "0x89",
+			"inputs": [
+				{"name":"arg0","type":"address"},
+				{"name":"arg1","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "wrapTON",
+			"inputs": [
+				{"name":"qtyTONgrams","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"processWrapStatus","type":"bool"}
+			]
+		},
+		{
+			"name": "unwrapTON",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"processUnwrapStatus","type":"bool"}
+			]
+		},
+		{
+			"name": "callbackUnwrapTON",
+			"id": "0x24",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
 			],
 			"outputs": [
 			]

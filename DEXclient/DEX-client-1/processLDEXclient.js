@@ -33,8 +33,8 @@ async function main(client) {
           function_name: 'processLiquidity',
           input: {
             pairAddr: pairAddress,
-            qtyA: 250000,
-            qtyB: 250000,
+            qtyA: 90000,
+            qtyB: 90000,
 
           }
         },

@@ -33,7 +33,7 @@ async function main(client) {
           function_name: 'makeAdepositToPair',
           input: {
             pairAddr: pairAddress,
-            qtyA: 3300,
+            qtyB: 130000,
           }
         },
         signer: {

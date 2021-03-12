@@ -421,6 +421,7 @@ contract DEXpair is IDEXpair {
 
 	// Function to start process of add liquidity to DEX pair reserve
 	function processLiquidity(uint128 qtyA, uint128 qtyB, address returnAddrA, address returnAddrB) public onlyConnectedDEXclient override functionID(0x00000011) {
+		require(!(address(this).balance < 2), 105);
 		address dexclient = msg.sender;
 		Client cc = dexpairclients[dexclient];
 		require(cc.status == 0, 104);
@@ -811,15 +812,20 @@ contract DEXpair is IDEXpair {
 		}
 	}
 
-	// Function to reset DEXclient processStatus. Only by owner
-	function resetStatus(address dexclient) public checkOwnerAndAccept returns (bool){
-		Client cc = dexpairclients[dexclient];
-		cc.qtyA = 0;
-		cc.qtyB = 0;
-		cc.status = 0;
-		bool status = (cc.status == 0);
-		dexpairclients[dexclient] = cc;
-		return status;
+	// Dev function to reset DEXclient processStatus. Only by owner
+	// function resetStatus(address dexclient) public checkOwnerAndAccept returns (bool){
+	// 	Client cc = dexpairclients[dexclient];
+	// 	cc.qtyA = 0;
+	// 	cc.qtyB = 0;
+	// 	cc.status = 0;
+	// 	bool status = (cc.status == 0);
+	// 	dexpairclients[dexclient] = cc;
+	// 	return status;
+	// }
+
+	// Function to get balance TONgrams for DEXpair.
+	function getBalanceTONgrams() public pure alwaysAccept returns (uint128 balanceTONgrams){
+		return address(this).balance;
 	}
 
 }

@@ -186,6 +186,36 @@ async function main(client) {
 
     resultQC = await client.net.query_collection({
       collection: 'accounts',
+      filter: { id: { eq: pairAddress } },
+      result: 'boc'
+    });
+    paramsOfEncodeMessage = {
+      abi: pairabi,
+      address: pairAddress,
+      call_set: {
+        function_name: 'getReservesBalance',
+        input: {}
+      },
+      signer: { type: 'None' },
+    };
+
+    resultEM = await client.abi.encode_message(paramsOfEncodeMessage);
+    paramsOfRunTvm = {
+      message: resultEM.message,
+      account: resultQC.result[0].boc,
+      abi: pairabi,
+    };
+
+    response = await client.tvm.run_tvm(paramsOfRunTvm);
+    console.log('Contract reacted to your getReservesBalance', response.decoded.output);
+    let reserveA = (response.decoded.output.balanceReserveA > 0)?response.decoded.output.balanceReserveA:1;
+    let reserveB = (response.decoded.output.balanceReserveB > 0)?response.decoded.output.balanceReserveB:1;
+    console.log('Current pair rate: 1 tokenA =', Math.fround(reserveB/reserveA),' tokenB');
+    console.log('Current pair rate: 1 tokenB =', Math.fround(reserveA/reserveB),' tokenA');
+
+
+    resultQC = await client.net.query_collection({
+      collection: 'accounts',
       filter: { id: { eq: contractAddress } },
       result: 'boc'
     });
@@ -212,6 +242,7 @@ async function main(client) {
     console.log('Contract reacted to your getPairWallets:', response.decoded.output);
     let walletA = response.decoded.output.walletA;
     let walletB = response.decoded.output.walletB;
+
 
     resultQC = await client.net.query_collection({
       collection: 'accounts',
@@ -261,16 +292,17 @@ async function main(client) {
     response = await client.tvm.run_tvm(paramsOfRunTvm);
     console.log('Contract reacted to your getBalance for walletB', response.decoded.output);
 
+
     resultQC = await client.net.query_collection({
       collection: 'accounts',
-      filter: { id: { eq: pairAddress } },
+      filter: { id: { eq: contractAddress } },
       result: 'boc'
     });
     paramsOfEncodeMessage = {
-      abi: pairabi,
-      address: pairAddress,
+      abi: abi,
+      address: contractAddress,
       call_set: {
-        function_name: 'getReservesBalance',
+        function_name: 'getBalanceTONgrams',
         input: {}
       },
       signer: { type: 'None' },
@@ -280,15 +312,12 @@ async function main(client) {
     paramsOfRunTvm = {
       message: resultEM.message,
       account: resultQC.result[0].boc,
-      abi: pairabi,
+      abi: abi,
     };
 
     response = await client.tvm.run_tvm(paramsOfRunTvm);
-    console.log('Contract reacted to your getReservesBalance', response.decoded.output);
-    let reserveA = (response.decoded.output.balanceReserveA > 0)?response.decoded.output.balanceReserveA:1;
-    let reserveB = (response.decoded.output.balanceReserveB > 0)?response.decoded.output.balanceReserveB:1;
-    console.log('Current pair rate: 1 tokenA =', Math.fround(reserveB/reserveA),' tokenB');
-    console.log('Current pair rate: 1 tokenB =', Math.fround(reserveA/reserveB),' tokenA');
+    console.log('Contract reacted to your getBalanceTONgrams:', response.decoded.output);
+
 
 
 

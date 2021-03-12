@@ -5,6 +5,7 @@ const fs = require('fs');
 const converter = require('hex2dec');
 const pathJson = './DEXclientContract.json';
 const pathJsonPair = './DEXpairContract.json';
+const qtyTONgrams = 2500000000;
 
 
 async function main(client) {
@@ -30,9 +31,9 @@ async function main(client) {
           value: contract.package.abi
         },
         call_set: {
-          function_name: 'connectPair',
+          function_name: 'wrapTON',
           input: {
-            pairAddr: pairAddress,
+            qtyTONgrams: qtyTONgrams,
           }
         },
         signer: {
@@ -42,35 +43,33 @@ async function main(client) {
       }
 
       let response = await client.processing.process_message(params);
-      console.log('Your connectPair proceed. Tx id: ', response.transaction.id);
-      console.log('Your connectPair output: ', response.decoded.output);
+      console.log('Your wrapTON proceed. Tx id: ', response.transaction.id);
+      console.log('Your wrapTON output: ', response.decoded.output);
 
       let resultQC = await client.net.query_collection({
-            collection: 'accounts',
-            filter: { id: { eq: contractAddress } },
-            result: 'boc'
-          });
-          let  paramsOfEncodeMessage = {
-            abi: abi,
-            address: contractAddress,
-            call_set: {
-              function_name: 'getPair',
-              input: {
-                value0:pairAddress,
-              }
-            },
-            signer: { type: 'None' },
-          };
+        collection: 'accounts',
+        filter: { id: { eq: contractAddress } },
+        result: 'boc'
+      });
+      let paramsOfEncodeMessage = {
+        abi: abi,
+        address: contractAddress,
+        call_set: {
+          function_name: 'getBalanceTONgrams',
+          input: {}
+        },
+        signer: { type: 'None' },
+      };
 
-          let resultEM = await client.abi.encode_message(paramsOfEncodeMessage);
-          let paramsOfRunTvm = {
-            message: resultEM.message,
-            account: resultQC.result[0].boc,
-            abi: abi,
-          };
+      let resultEM = await client.abi.encode_message(paramsOfEncodeMessage);
+      let paramsOfRunTvm = {
+        message: resultEM.message,
+        account: resultQC.result[0].boc,
+        abi: abi,
+      };
 
-          response = await client.tvm.run_tvm(paramsOfRunTvm);
-          console.log('Contract reacted to your getPair:', response.decoded.output);
+      response = await client.tvm.run_tvm(paramsOfRunTvm);
+      console.log('Contract reacted to your getBalanceTONgrams:', response.decoded.output);
 
 
     }catch(err){

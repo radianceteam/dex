@@ -16,6 +16,8 @@ interface IDEXclient {
 	function setNewEmptyWallet(address value0) external functionID(0x00000007);
 	function setPairDepositA(address arg0) external functionID(0x00000008);
 	function setPairDepositB(address arg0) external functionID(0x00000009);
+	function setWrapper(address arg0, address arg1) external functionID(0x00000089);
+	function callbackUnwrapTON(uint128 value0) external functionID(0x00000024);
 }
 
 interface IDEXpair {
@@ -30,7 +32,17 @@ interface IDEXpair {
 	function returnAllLiquidity() external functionID(0x00000019);
 }
 
+interface ITONWrapper {
+	function wrapGrams(address destination) external functionID(0x00000025);
+	function unwrapGrams() external functionID(0x00000052);
+	function setDepositWallet(address value0) external functionID(0x00000125);
+	function balanceDepositWallet(uint128 value0) external functionID(0x00000152);
+}
+
 contract DEXclient is IDEXclient {
+
+	address constant ROOT_WRAPPED_TON = address(0x4f3c1b7a7eda40b7ae2de8033f119f18bde059ee3e2e367858845316340dfc97);
+	address constant WRAPPER_TON = address(0xebae37c8e611f20f6e32abf2bed159c72e10118f923e3f962fa344ca31274ff0);
 
 	// Wallet structure
 	struct Wallet {
@@ -44,6 +56,15 @@ contract DEXclient is IDEXclient {
 
 	mapping(address => address) roots;
 	address[] rootKeys;
+
+	// Wrapper structure
+	struct Wrapper {
+		address root;
+		address depositWallet;
+	}
+
+	mapping(address => Wrapper) wrappers;
+	address[] wrappersKeys;
 
 	// Pair structure
 	struct Pair {
@@ -62,15 +83,16 @@ contract DEXclient is IDEXclient {
 	address[] pairKeys;
 
 	// Grams constants
-	uint128 constant GRAMS_CONNECT_PAIR = 2200000000;	//add Senitskiy 736000000
-	uint128 constant GRAMS_PROCESS_LIQUIDITY = 20000000;
-	uint128 constant GRAMS_PROCESS_SWAP = 20000000;
+	uint128 constant GRAMS_CONNECT_PAIR = 2200000000;
+	uint128 constant GRAMS_PROCESS_LIQUIDITY = 200000000;
+	uint128 constant GRAMS_PROCESS_SWAP = 200000000;
 	uint128 constant GRAMS_SENDTOKENS_TRANSMITER = 500000000;
 	uint128 constant GRAMS_SENDTOKENS_RECEIVER = 300000000;
-  	uint128 constant GRAMS_PROCESS_RETURN = 220000000;
-	uint128 constant GRAMS_ROOT_CREATE = 160000000; // 160000000; add Senitskiy 110001000
-	uint128 constant GRAMS_NEW_WALLET = 50000000; // 50000000; add Senitskiy 1002500
-	uint128 constant GRAMS_GET_BALANCE = 22000000;
+	uint128 constant GRAMS_PROCESS_RETURN = 220000000;
+	uint128 constant GRAMS_ROOT_CREATE = 1000000000;
+	uint128 constant GRAMS_NEW_WALLET = 500000000;
+	uint128 constant GRAMS_GET_BALANCE = 220000000;
+	uint128 constant GRAMS_UNWRAP = 220000000;
 
 	// Modifier that allows public function to accept external calls always.
 	modifier alwaysAccept {
@@ -84,6 +106,22 @@ contract DEXclient is IDEXclient {
 		tvm.accept();
 		_;
 	}
+
+	// Modifier that allows public function to accept external calls only from the contract owner.
+	modifier onlyOwnerWallets {
+		require(wallets.exists(msg.sender), 107);
+		tvm.accept();
+		_;
+	}
+
+
+	// Init function.
+	constructor() public {
+		require(tvm.pubkey() == msg.pubkey(), 102);
+		tvm.accept();
+		createNewEmptyWallet(ROOT_WRAPPED_TON);
+	}
+
 
 	// Function to transfers plain transfers.
 	function sendTransfer(address dest, uint128 value, bool bounce) public view checkOwnerAndAccept {
@@ -113,6 +151,18 @@ contract DEXclient is IDEXclient {
 		}
 	}
 
+	function createNewEmptyWalletByOwner(address rootAddr) public view checkOwnerAndAccept  returns (bool createStatus) {
+		createStatus = false;
+		if (!roots.exists(rootAddr)){
+			address creator = rootAddr;
+			address owner = address(this);
+			uint256 ownerUINT = owner.value;
+			TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x00000007, 0, 0, ownerUINT, GRAMS_NEW_WALLET);
+			creator.transfer({value:GRAMS_ROOT_CREATE, bounce:false, body:body});
+			createStatus = true;
+		}
+	}
+
 	function setNewEmptyWallet(address value0) public override alwaysAccept functionID(0x00000007){
 		address root = msg.sender;
 		address wallet = value0;
@@ -126,6 +176,10 @@ contract DEXclient is IDEXclient {
 			wc.balance = 0;
 			wallets[wallet] = wc;
 		}
+	}
+
+	function getWalletByRoot(address rootAddr) public view alwaysAccept returns (address wallet) {
+		wallet = roots[rootAddr];
 	}
 
 	function setPair(address arg0, address arg1, address arg2, address arg3, address arg4, address arg5) public alwaysAccept override functionID(0x00000003) {
@@ -155,13 +209,6 @@ contract DEXclient is IDEXclient {
 		pairs[dexpair] = cp;
 	}
 
-	function setPairDepositB(address arg0) public alwaysAccept override functionID(0x00000009) {
-		address dexpair = msg.sender;
-		Pair cp = pairs[dexpair];
-		cp.depositWalletB = arg0;
-		pairs[dexpair] = cp;
-	}
-
 	function getPair(address value0) public view alwaysAccept returns (address pairRootA, address pairReserveA, address clientDepositA, uint128 clientAllowanceA, address pairRootB, address pairReserveB, address clientDepositB, uint128 clientAllowanceB) {
 		Pair cp = pairs[value0];
 		pairRootA = cp.rootA;
@@ -173,6 +220,14 @@ contract DEXclient is IDEXclient {
 		clientDepositB = cp.depositWalletB;
 		clientAllowanceB = cp.allowanceB;
 	}
+
+	function setPairDepositB(address arg0) public alwaysAccept override functionID(0x00000009) {
+		address dexpair = msg.sender;
+		Pair cp = pairs[dexpair];
+		cp.depositWalletB = arg0;
+		pairs[dexpair] = cp;
+	}
+
 
 	function sendTokens(address from, address to, uint128 tokens, uint128 grams) public checkOwnerAndAccept view returns (address transmitter, address receiver, TvmCell body) {
 		transmitter = from;
@@ -317,6 +372,56 @@ contract DEXclient is IDEXclient {
 		TvmCell body = tvm.encodeBody(IDEXpair(pairAddr).processSwapB, qtyB, roots[cp.rootA], roots[cp.rootB]);
 		pairAddr.transfer({value:GRAMS_PROCESS_SWAP, body:body});
 		processSwapStatus = true;
+	}
+
+	// Function to get balance TONgrams for DEXclient.
+	function getBalanceTONgrams() public pure alwaysAccept returns (uint128 balanceTONgrams){
+		return address(this).balance;
+	}
+
+	function setWrapper(address arg0, address arg1) public alwaysAccept override functionID(0x00000089) {
+		address wrapper = msg.sender;
+		if (!wrappers.exists(wrapper)){
+			Wrapper cw = wrappers[wrapper];
+			cw.root = arg0;
+			cw.depositWallet = arg1;
+			wrappers[wrapper] = cw;
+			wrappersKeys.push(wrapper);
+		}
+	}
+
+	function wrapTON(uint128 qtyTONgrams) public view checkOwnerAndAccept returns (bool processWrapStatus) {
+		processWrapStatus = false;
+		require(!(qtyTONgrams > address(this).balance), 106);
+		TvmCell body = tvm.encodeBody(ITONWrapper(WRAPPER_TON).wrapGrams,roots[ROOT_WRAPPED_TON]);
+		WRAPPER_TON.transfer({value:qtyTONgrams, body:body});
+		processWrapStatus = true;
+	}
+
+	function unwrapTON() public view checkOwnerAndAccept returns (bool processUnwrapStatus) {
+		processUnwrapStatus = false;
+		Wrapper cw = wrappers[WRAPPER_TON];
+		address transmitter = roots[cw.root];
+		TvmCell body = tvm.encodeBody(ITONTokenWallet(transmitter).getBalance_InternalOwner, 0x00000024);
+		transmitter.transfer({value:GRAMS_GET_BALANCE, body:body});
+		processUnwrapStatus = true;
+	}
+
+	// Function to send tokens private
+	function processTokens(address from, address to, uint128 tokens, uint128 grams) private pure inline {
+		address transmitter = from;
+		address receiver = to;
+		TvmCell body = tvm.encodeBody(ITONTokenWallet(transmitter).transfer, receiver, tokens, grams);
+		transmitter.transfer({value:GRAMS_SENDTOKENS_TRANSMITER, body:body});
+	}
+
+	function callbackUnwrapTON(uint128 value0) public onlyOwnerWallets override functionID(0x00000024) {
+		address clientWallet = msg.sender;
+		Wrapper cw = wrappers[WRAPPER_TON];
+		address wrapperDepositWallet = cw.depositWallet;
+		processTokens(clientWallet, wrapperDepositWallet, value0, GRAMS_SENDTOKENS_RECEIVER);
+		TvmCell body = tvm.encodeBody(ITONWrapper(WRAPPER_TON).unwrapGrams);
+		WRAPPER_TON.transfer({value:GRAMS_UNWRAP, body:body});
 	}
 
 }

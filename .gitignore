@@ -111,3 +111,4 @@ dist
 /DEX-pair/
 /DEXclient/DEX-client-*
 workspace.code-workspace
+DEXclient/DEXpairContractUSDT.json

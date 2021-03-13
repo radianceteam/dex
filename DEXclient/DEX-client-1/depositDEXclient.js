@@ -33,8 +33,8 @@ async function main(client) {
           function_name: 'makeABdepositToPair',
           input: {
             pairAddr: pairAddress,
-            qtyA: 90000,
-            qtyB: 90000,
+            qtyA: 10000,
+            qtyB: 10000,
 
           }
         },

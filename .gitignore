@@ -112,3 +112,8 @@ dist
 /DEXclient/DEX-client-*
 workspace.code-workspace
 DEXclient/DEXpairContractUSDT.json
+DEXclient/DEXpairContractBTC-USDT.json
+DEXclient/DEXpairContractETH-BTC.json
+DEXclient/DEXpairContractWTON-BTC.json
+DEXclient/DEXpairContractWTON-ETH.json
+DEXclient/DEXpairContractWTON-USDT.json

@@ -1,0 +1,375 @@
+{
+	"ABI version": 2,
+	"header": ["time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"root0","type":"address"},
+				{"name":"root1","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "isDEXpairWallet",
+			"inputs": [
+				{"name":"arg0","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		},
+		{
+			"name": "isDEXpairRoot",
+			"inputs": [
+				{"name":"arg0","type":"address"}
+			],
+			"outputs": [
+				{"name":"value0","type":"bool"}
+			]
+		},
+		{
+			"name": "sendTransfer",
+			"inputs": [
+				{"name":"dest","type":"address"},
+				{"name":"value","type":"uint128"},
+				{"name":"bounce","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "createDepositWallet",
+			"inputs": [
+				{"name":"rootAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"createStatus","type":"bool"}
+			]
+		},
+		{
+			"name": "connect",
+			"id": "0x5",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setPairDepositWallet",
+			"id": "0xA",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendTokens2",
+			"inputs": [
+				{"name":"from","type":"address"},
+				{"name":"to","type":"address"},
+				{"name":"tokens","type":"uint128"},
+				{"name":"grams","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"transmitter","type":"address"},
+				{"name":"receiver","type":"address"}
+			]
+		},
+		{
+			"name": "sendTokens",
+			"inputs": [
+				{"name":"from","type":"address"},
+				{"name":"to","type":"address"},
+				{"name":"tokens","type":"uint128"},
+				{"name":"grams","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"transmitter","type":"address"},
+				{"name":"receiver","type":"address"},
+				{"name":"body","type":"cell"}
+			]
+		},
+		{
+			"name": "askBalancePairWallets",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setWalletBalance",
+			"id": "0x6",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getReserveWalletsBalance",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"walletReserveA","type":"uint128"},
+				{"name":"walletReserveB","type":"uint128"}
+			]
+		},
+		{
+			"name": "getLengthQueueA",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"length","type":"uint128"}
+			]
+		},
+		{
+			"name": "getAllQueueA",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"queueArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "getLengthQueueB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"length","type":"uint128"}
+			]
+		},
+		{
+			"name": "getAllQueueB",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"queueArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "setPairReserveWallet",
+			"id": "0xB",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPair",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"addressRootA","type":"address"},
+				{"name":"addressRootB","type":"address"},
+				{"name":"addressReserveA","type":"address"},
+				{"name":"addressReserveB","type":"address"},
+				{"name":"balanceReserveA","type":"uint128"},
+				{"name":"balanceReserveB","type":"uint128"},
+				{"name":"walletReserveA","type":"uint128"},
+				{"name":"walletReserveB","type":"uint128"}
+			]
+		},
+		{
+			"name": "getReservesBalance",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"balanceReserveA","type":"uint128"},
+				{"name":"balanceReserveB","type":"uint128"}
+			]
+		},
+		{
+			"name": "getClient",
+			"inputs": [
+				{"name":"dexclient","type":"address"}
+			],
+			"outputs": [
+				{"name":"indexDEXclient","type":"uint256"},
+				{"name":"depositWalletA","type":"address"},
+				{"name":"depositWalletB","type":"address"},
+				{"name":"processStatus","type":"uint8"},
+				{"name":"processQtyA","type":"uint128"},
+				{"name":"returnWalletA","type":"address"},
+				{"name":"processQtyB","type":"uint128"},
+				{"name":"returnWalletB","type":"address"}
+			]
+		},
+		{
+			"name": "getClientsArr",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"dexclientsArr","type":"address[]"}
+			]
+		},
+		{
+			"name": "getProcessRouter",
+			"inputs": [
+				{"name":"clientAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"dexclientA","type":"address"},
+				{"name":"dexclientB","type":"address"}
+			]
+		},
+		{
+			"name": "getShareReserveProvider",
+			"inputs": [
+				{"name":"providerAddr","type":"address"}
+			],
+			"outputs": [
+				{"name":"balanceDEXprovider","type":"uint128"}
+			]
+		},
+		{
+			"name": "getTotalSupply",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"totalSupplyDEXpair","type":"uint128"}
+			]
+		},
+		{
+			"name": "processLiquidity",
+			"id": "0x11",
+			"inputs": [
+				{"name":"qtyA","type":"uint128"},
+				{"name":"qtyB","type":"uint128"},
+				{"name":"returnAddrA","type":"address"},
+				{"name":"returnAddrB","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getQuotient",
+			"inputs": [
+				{"name":"min","type":"uint128"},
+				{"name":"max","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "getRemainder",
+			"inputs": [
+				{"name":"min","type":"uint128"},
+				{"name":"max","type":"uint128"}
+			],
+			"outputs": [
+				{"name":"value0","type":"uint128"}
+			]
+		},
+		{
+			"name": "responceClientBalanceA",
+			"id": "0x16",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "responceClientBalanceB",
+			"id": "0x26",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "returnDeposit",
+			"id": "0x18",
+			"inputs": [
+				{"name":"returnAddrA","type":"address"},
+				{"name":"returnAddrB","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "returnClientDepositA",
+			"id": "0x36",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "returnClientDepositB",
+			"id": "0x46",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "processSwapA",
+			"id": "0x12",
+			"inputs": [
+				{"name":"qtyA","type":"uint128"},
+				{"name":"returnAddrA","type":"address"},
+				{"name":"returnAddrB","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "swapA",
+			"id": "0x56",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "processSwapB",
+			"id": "0x21",
+			"inputs": [
+				{"name":"qtyB","type":"uint128"},
+				{"name":"returnAddrA","type":"address"},
+				{"name":"returnAddrB","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "swapB",
+			"id": "0x66",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "returnAllLiquidity",
+			"id": "0x19",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getBalanceTONgrams",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"balanceTONgrams","type":"uint128"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

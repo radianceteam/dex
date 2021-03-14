@@ -1,4 +1,4 @@
 # DEX collection
 ## DEXroot
-## DEXpair
-## DEXclient
+## DEXcore
+## DEXdebot

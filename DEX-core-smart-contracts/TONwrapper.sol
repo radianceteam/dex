@@ -82,7 +82,7 @@ contract TONWrapper is ITONWrapper {
 		return arg0 == ROOT_WRAPPED_TON;
 	}
 
-	// Modifier that allows public function to accept external calls only from the DEXpair tokens.
+	// Modifier that allows public function to accept external calls only from the DEX pair tokens.
 	modifier onlyRoot {
 		require(isRoot(msg.sender), 101);
 		tvm.accept();

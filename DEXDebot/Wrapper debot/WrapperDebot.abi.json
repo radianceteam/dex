@@ -1,0 +1,568 @@
+{
+	"ABI version": 2,
+	"header": ["pubkey", "time", "expire"],
+	"functions": [
+		{
+			"name": "constructor",
+			"inputs": [
+				{"name":"debotAbi","type":"bytes"},
+				{"name":"DexRootAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setABI",
+			"inputs": [
+				{"name":"dabi","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "start",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployDexClient",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployDexClientRequest",
+			"inputs": [
+				{"name":"value","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "deployError",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setWalletAddressAfterDeploy",
+			"inputs": [
+				{"name":"newAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "checkDeployedWallet",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "checkWalletExist",
+			"inputs": [
+				{"name":"acc_type","type":"int8"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "selectWallet",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setWalletAddress",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "createWTONwallet",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "createWTONwallet1",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "scCreareTonW",
+			"inputs": [
+				{"name":"createStatus","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "errCreareTonW",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getClientDataPRE",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getClientData",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setBalance",
+			"inputs": [
+				{"name":"nanotokens","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setClientData",
+			"inputs": [
+				{"name":"pairKeysR","type":"address[]"},
+				{"name":"walletKeysR","type":"address[]"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPairsData",
+			"inputs": [
+				{"name":"pairAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setClientPairData",
+			"inputs": [
+				{"name":"pairRootA","type":"address"},
+				{"name":"pairReserveA","type":"address"},
+				{"name":"clientDepositA","type":"address"},
+				{"name":"clientAllowanceA","type":"uint128"},
+				{"name":"pairRootB","type":"address"},
+				{"name":"pairReserveB","type":"address"},
+				{"name":"clientDepositB","type":"address"},
+				{"name":"clientAllowanceB","type":"uint128"},
+				{"name":"curPair","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getWalletsData",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getPairClientWalletsFunc",
+			"inputs": [
+				{"name":"cuePair","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setWalletsNameS",
+			"inputs": [
+				{"name":"clientWalletA","type":"address"},
+				{"name":"clientWalletB","type":"address"},
+				{"name":"pairReturn","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "askRootAddressTokenWallet",
+			"inputs": [
+				{"name":"waletAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setRootAddress",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "askNameTokenWallet",
+			"inputs": [
+				{"name":"waletAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTokenName",
+			"inputs": [
+				{"name":"value0","type":"bytes"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "askWalletBalance1",
+			"inputs": [
+				{"name":"waletAddress","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setTokenBalanceInMenuCB",
+			"inputs": [
+				{"name":"value0","type":"uint128"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setDataForView",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "mainmenu",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "unwrapTON1",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "unwrapTON",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "scUnwrapTON",
+			"inputs": [
+				{"name":"processWrapStatus","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "errUnwrapTON",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "retryWrapTons",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "wrapTonsStep1",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "wrapTonsStep2",
+			"inputs": [
+				{"name":"value","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "scWrap",
+			"inputs": [
+				{"name":"processWrapStatus","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "errWrap",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "retryWrap",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendTokens_chooseWallet",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setWalletForSend",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setValueForSend",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "checkTokensAmount",
+			"inputs": [
+				{"name":"value","type":"uint256"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendTokens_inputRecipAddr",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "resetTokensForSend",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendTokens_checkRoots",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "errCheckRoot",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getRecipRootAddress",
+			"inputs": [
+				{"name":"value0","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "resetRecipientAddress",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "sendTokensRequest",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "scSend",
+			"inputs": [
+				{"name":"transmitter","type":"address"},
+				{"name":"receiver","type":"address"},
+				{"name":"body","type":"cell"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "errSendTokens",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "retrySend",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "connectToPair_GetPairAddress",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "connectToPair_AddressExistCheck",
+			"inputs": [
+				{"name":"value","type":"address"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "connectToPair",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "setDataFromConnectFunc",
+			"inputs": [
+				{"name":"statusConnection","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "someError",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "connectErrorBool",
+			"inputs": [
+				{"name":"value","type":"bool"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "connectError",
+			"inputs": [
+				{"name":"sdkError","type":"uint32"},
+				{"name":"exitCode","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "tomainmenu",
+			"inputs": [
+				{"name":"index","type":"uint32"}
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getVersion",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"name","type":"bytes"},
+				{"name":"semver","type":"uint24"}
+			]
+		},
+		{
+			"name": "fetch",
+			"inputs": [
+			],
+			"outputs": [
+				{"components":[{"name":"id","type":"uint8"},{"name":"desc","type":"bytes"},{"components":[{"name":"desc","type":"bytes"},{"name":"name","type":"bytes"},{"name":"actionType","type":"uint8"},{"name":"attrs","type":"bytes"},{"name":"to","type":"uint8"},{"name":"misc","type":"cell"}],"name":"actions","type":"tuple[]"}],"name":"contexts","type":"tuple[]"}
+			]
+		},
+		{
+			"name": "quit",
+			"inputs": [
+			],
+			"outputs": [
+			]
+		},
+		{
+			"name": "getDebotOptions",
+			"inputs": [
+			],
+			"outputs": [
+				{"name":"options","type":"uint8"},
+				{"name":"debotAbi","type":"bytes"},
+				{"name":"targetAbi","type":"bytes"},
+				{"name":"targetAddr","type":"address"}
+			]
+		}
+	],
+	"data": [
+	],
+	"events": [
+	]
+}

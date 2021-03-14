@@ -23,7 +23,7 @@ _example: node deployingTokenRoot.js Test tst_
 
 *run and see .log for current status*
 
-### Deploy wallet
+### Deploy wallet to Root
 
 $ node deployingWalletToRoot.js [directoryRoot] [numberWallet] [internalOwner]
 

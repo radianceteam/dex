@@ -1,5 +1,7 @@
 # Freeton DEX Debot interface
 
+If you want to test the DEX functionality go to "Testing the DEX functionality with debots" below.
+
 ## How to use
 
 When [compiling](https://docs.ton.dev/86757ecb2/v/0/p/950f8a-write-smart-contract-in-solidity/t/1620b2) DeBot smart contract, make sure to place the Debot.sol file into the folder with your DeBot contract code.

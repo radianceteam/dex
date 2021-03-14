@@ -146,8 +146,8 @@ Verify that state matches parameters you have provided during deploy.
 
 ```
 
-## 6. DEXclient management
-### 6.1. Chek your TON balance of DEXclient
+## 6. Preparing for operation with TIP-3 tokens
+### 6.1. Check your TON balance of DEXclient
 ```
 ./tonos-cli account <DEXclient_address>
 ```
@@ -182,7 +182,7 @@ You can unwrap back all your wTON to TON using comand:
 ./tonos-cli call <DEXclient_address> unwrapTON '{}' --sign deploy.keys.json --abi DEXclient.abi
 
 ```
-### 6.4. DEX preset configuration
+### 6.4. DEX preset configuration (deployed on net.ton.dev)
 
 TIP3 RootTokenContract.cpp(https://github.com/tonlabs/ton-labs-contracts/pull/60)
 
@@ -212,21 +212,11 @@ You will get
 - "balanceReserveA": "<nanoTokens_quantity>"
 - "balanceReserveB": "<nanoTokens_quantity>"
 
-where nanoToken rate:
-- 1 nanoToken = 0,000 000 001 wTON
-- 1 nanoToken = 0,000 000 001 wBTC
-- 1 nanoToken = 0,000 000 001 wETH
-- 1 nanoToken = 0,000 000 001 wUSDT
-
-You can calculate:
-- current swap rate for 1 tokenA  you will get (balanceReserveB / balanceReserveA) tokenB
-- current swap rate for 1 tokenB  you will get (balanceReserveA / balanceReserveB) tokenA
-
-DEXpair swap fee will 0,3% of quantity income Token.
-DEXpair oracle limit for one swap is max 0,5% change for balance ReserveA or ReserveB.
+where nanoToken is:
+- 1 nanoToken = 0,000 000 001 wTON/wBTC/wETH/wUSDT/etc.
 
 
-## 7. DEXclient management
+## 7. DEXclient management and major actions
 ### 7.1. Get DEXclient connection state to DEXpair
 ```
 ./tonos-cli run <DEXclient_address> getPair '{"value0":"<DEXpair_address>"}' --abi DEXclient.abi
@@ -307,7 +297,7 @@ You will get
 - totalSupplyDEXpair: '<total_number_of_stakes>'
 - balanceDEXprovider: '<your_number_of_stakes>'
 
-## 8. DEXclient management using ton-client-js (https://github.com/tonlabs/ton-client-js) for node-js
+## 8. DEXclient management using TON SDK (ton-client-js) with examples 
 ### 8.1. Install dependencies
 ```
 npm i --save @tonclient/core

@@ -114,7 +114,7 @@ Request status for the generated contract address from the blockchain:
 ```
 ./tonos-cli account <DEXclient_address>
 ```
-#### 5.2.2. Send a few tokens(requiry !<50) to the new address from another contract.
+#### 5.2.2. Send a few tokens(requiry !<100) to the new address from another contract.
 Create, and if necessary, confirm a transaction from another wallet.
 Ensure that contract address has been created in the blockchain and has Uninit status.
 ```

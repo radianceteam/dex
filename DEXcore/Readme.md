@@ -226,7 +226,7 @@ DEXpair swap fee will 0,3% of quantity income Token.
 DEXpair oracle limit for one swap is max 0,5% change for balance ReserveA or ReserveB.
 
 
-## 7. Swap DEXclient management
+## 7. DEXclient management
 ### 7.1. Get DEXclient connection state to DEXpair
 ```
 ./tonos-cli run <DEXclient_address> getPair '{"value0":"<DEXpair_address>"}' --abi DEXclient.abi

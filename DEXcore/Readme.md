@@ -13,6 +13,11 @@ Available actions in TONOS-CLI include the following:
 * running getter contract methods
 * executing contract methods
 
+Requirements for 14/03/2021:
+* TONOS-CLI 0.6.0
+* TON Solidity Compiler 0.17.7
+* TON SDK ton-client-js 1.5.3+
+
 ## 2. TONOS-CLI Installation
 ### 2.1. Install TONOS-CLI and download contract files
 #### Linux
@@ -20,7 +25,7 @@ Available actions in TONOS-CLI include the following:
 Create a folder. Download the .tar.gz file from the latest release from here: https://github.com/tonlabs/tonos-cli/releases to this folder. Extract it:
 
 ```
-tar -xvf tonos-cli_v0.1.1_linux.tar.gz
+tar -xvf tonos-cli_v0.6.0_linux.tar.gz
 ```
 Download token contract files (RootTokenContract.cpp, RootTokenContract.hpp, TONTokenWallet.cpp, TONTokenWallet.hpp) from https://github.com/tonlabs/ton-labs-contracts/tree/master/cpp/tokens-fungible. Place them into the folder containing the TONOS-CLI executable.
 
@@ -33,7 +38,7 @@ Install Cargo: https://github.com/rust-lang/cargo#compiling-from-source
 Build TONOS-CLI tool from source:
 
 ```
-> git clone <https://github.com/tonlabs/tonos-cli.git>
+> git clone https://github.com/tonlabs/tonos-cli.git
 
 > cd tonos-cli
 

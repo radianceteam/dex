@@ -114,20 +114,20 @@ Request status for the generated contract address from the blockchain:
 ```
 ./tonos-cli account <DEXclient_address>
 ```
-#### 5.2.2. Send a few tokens(requiry !<100) to the new address from another contract.
+#### 5.2.2. Send a few TONs(requiry !<100) to the new address from another contract.
 Create, and if necessary, confirm a transaction from another wallet.
 Ensure that contract address has been created in the blockchain and has Uninit status.
 ```
 ./tonos-cli account <DEXclient_address>
 ```
-### 5.3. Deploy the root contract to the blockchain
+### 5.3. Deploy DEXclient contract to the blockchain
 Use the following command:
 ```
 ./tonos-cli deploy DEXclient.tvc '{}' --abi DEXclient.abi --sign deploy.keys.json --wc <workchain_id>
 ```
 * `--wc <workchain_id>` - (optional) ID of the workchain the wallet will be deployed to (-1 for masterchain, 0 for basechain). By default this value is set to 0.
 
-#### 5.4.1. Check the token root status again
+#### 5.4.1. Check the <DEXclient_address> status again
 Now it should be Active.
 ```
 ./tonos-cli account <DEXclient_address>
@@ -306,3 +306,59 @@ You can check your part of DEXpair using command:
 You will get
 - totalSupplyDEXpair: '<total_number_of_stakes>'
 - balanceDEXprovider: '<your_number_of_stakes>'
+
+## 8. DEXclient management using ton-client-js (https://github.com/tonlabs/ton-client-js) for node-js
+### 8.1. Install dependencies
+```
+npm i --save @tonclient/core
+npm i --save @tonclient/lib-node
+npm i --save fs
+
+```
+### 8.2. Deploy DEXclient contract to the blockchain
+```
+node deployDEXclient.js
+```
+* `const pathJson = './DEXclientContract.json';` - at the end of script <DEXclient_address> and keys will be in this file.
+* `const tongrams = 100000000000;` - tongrams qty which giver transfer to <DEXclient_address> before deploy.
+
+### 8.3. Connect to DEXpairs
+<!-- ```
+./tonos-cli call <DEXclient_address> makeAdepositToPair '{"pairAddr":"<DEXpair_address>","qtyA":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
+./tonos-cli call <DEXclient_address> makeBdepositToPair '{"pairAddr":"<DEXpair_address>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
+./tonos-cli call <DEXclient_address> returnDepositFromPair '{"pairAddr":"<DEXpair_address>"}' --sign deploy.keys.json --abi DEXclient.abi
+```
+You can check change of your wallets balances using commands from 7.1 and 7.2
+
+### 7.4. Swaps 'A to B' and 'B to A'
+```
+./tonos-cli call <DEXclient_address> processSwapA '{"pairAddr":"<DEXpair_address>","qtyA":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
+./tonos-cli call <DEXclient_address> processSwapB '{"pairAddr":"<DEXpair_address>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
+```
+- You can check change of your wallets balances using commands from 7.1 and 7.2
+- You can check change of DEXpair reserves balances using commands from 6.4
+
+### 7.5. Provide liquidity to DEXpairs and return
+
+If you want to became shareholder of DEXpair and will get part of DEXpair profit you need provide some liquidity to DEXpair.
+You should collect both DEXpair tokens on your wallets using swap.
+Any time you can returm your part of DEXpair reserves balances.
+
+```
+./tonos-cli call <DEXclient_address> makeABdepositToPair '{"pairAddr":"<DEXpair_address>","qtyA":"<set_quantity_nanoTokens>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
+./tonos-cli call <DEXclient_address> processLiquidity '{"pairAddr":"<DEXpair_address>","qtyB":"<set_quantity_nanoTokens>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
+./tonos-cli call <DEXclient_address> returnAllLiquidity '{"pairAddr":"<DEXpair_address>"}' --sign deploy.keys.json --abi DEXclient.abi
+
+```
+You can check change of your wallets balances using commands from 7.1 and 7.2
+You can check change of DEXpair reserves balances using commands from 6.4
+You can check your part of DEXpair using command:
+
+```
+./tonos-cli run <DEXpair_address> getShareReserveProvider '{"providerAddr":"<DEXclient_address>"}' --abi DEXpair.abi.json
+./tonos-cli run <DEXpair_address> getTotalSupply '{}' --abi DEXpair.abi.json
+
+```
+You will get
+- totalSupplyDEXpair: '<total_number_of_stakes>'
+- balanceDEXprovider: '<your_number_of_stakes>' -->

@@ -79,13 +79,16 @@ After this you can launch Swapper Debot and Liquidity Provider Debot and follow 
 
 Debots:
 
-TONwrapperDebot
+**TONwrapperDebot**
+
 tonos-cli debot fetch 0:35980ae219f15a716e9a0e5562c5c3ec9029adddb6fcb221f2aa6f64a8c38aa4
 
-Swapper
+**Swapper**
+
 tonos-cli debot fetch 0:dbc0f2367ab70fb845c44e596ee1b061bae15562f937768f6c7c27edef139a22
 
-Liquidity Provider
+**Liquidity Provider**
+
 tonos-cli debot fetch 0:08b76ddf6c8e3d8b4f6e7f57c1eec01c65b9e3e2d6f82edb113dac82b2100e81
 
 

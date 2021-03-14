@@ -186,44 +186,44 @@ You can unwrap back all your wTON to TON using comand:
 
 TIP3 RootTokenContract.cpp(https://github.com/tonlabs/ton-labs-contracts/pull/60)
 
-wTON 0:bc865dc0b225ec75e158a2e3f862ce6a2398f733930de3fc626643dfdacfb798
-wUSDT 0:b7b17288b1e1c1166797fc40f6329aa598ef720176738769f79fa49c87f50feb
-wBTC 0:2ffafd25bdc5b322318ca768d8fa9044cf602c4589b02671a430b1ff949173ac
-wETH 0:2e3854dcfa1f1150e3ad3062692e9891650a8915c9982879829b3b47080189aa
+- wTON 0:bc865dc0b225ec75e158a2e3f862ce6a2398f733930de3fc626643dfdacfb798
+- wUSDT 0:b7b17288b1e1c1166797fc40f6329aa598ef720176738769f79fa49c87f50feb
+- wBTC 0:2ffafd25bdc5b322318ca768d8fa9044cf602c4589b02671a430b1ff949173ac
+- wETH 0:2e3854dcfa1f1150e3ad3062692e9891650a8915c9982879829b3b47080189aa
 
 
 DEXpair.sol with wTON
-wTON-wUSDT 0:f06c877542037ca512e43e42ca621c998daccce28fe02b5246a89551cb8659d5
-wTON-wBTC 0:03bb86589570aa7e0b95ceabba2f5eecc0c731a4b74fb1c0cec2bddc23add81b
-wTON-wETH 0:aa7d2070534679facaab708b985f27b791adf2fcc2d35465c4926b61fea3dd97
+- wTON-wUSDT 0:f06c877542037ca512e43e42ca621c998daccce28fe02b5246a89551cb8659d5
+- wTON-wBTC 0:03bb86589570aa7e0b95ceabba2f5eecc0c731a4b74fb1c0cec2bddc23add81b
+- wTON-wETH 0:aa7d2070534679facaab708b985f27b791adf2fcc2d35465c4926b61fea3dd97
 
 DEXpair.sol without wTON
-wBTC-wUSDT 0:0a1f28614409c815d3e5f0774ed161c71929ae800b8f4bef6954b65147beb669
-wETH-wUSDT 0:8588a819c849e7209a4d730dc1d8516ef29f4f17bcd5b459ba2ebae93f36c9a6
+- wBTC-wUSDT 0:0a1f28614409c815d3e5f0774ed161c71929ae800b8f4bef6954b65147beb669
+- wETH-wUSDT 0:8588a819c849e7209a4d730dc1d8516ef29f4f17bcd5b459ba2ebae93f36c9a6
 
 We provide some liquidity to all DEXpairs.
-You can check current DEXpair balance ReserveA and ReserveB  using command
+You can check current DEXpair balance ReserveA and ReserveB  using command.
 
 ```
 ./tonos-cli run <DEXpair_address> getReservesBalance '{}' --abi DEXpair.abi.json
 
 ```
 You will get
-"balanceReserveA": "<quantity in nanoTokens>",
-"balanceReserveB": "<quantity in nanoTokens>"
+- "balanceReserveA": "<quantity in nanoTokens>",
+- "balanceReserveB": "<quantity in nanoTokens>"
 
 where nanoToken rate:
-1 nanoToken = 0,000 000 001 wTON
-1 nanoToken = 0,000 000 001 wBTC
-1 nanoToken = 0,000 000 001 wETH
-1 nanoToken = 0,000 000 001 wUSDT
+- 1 nanoToken = 0,000 000 001 wTON
+- 1 nanoToken = 0,000 000 001 wBTC
+- 1 nanoToken = 0,000 000 001 wETH
+- 1 nanoToken = 0,000 000 001 wUSDT
 
 You can calculate:
 - current swap rate for 1 tokenA  you will get (balanceReserveB / balanceReserveA) tokenB
 - current swap rate for 1 tokenB  you will get (balanceReserveA / balanceReserveB) tokenA
 
-DEXpair swap fee will 0,3% of quantity income Token
-DEXpair oracle limit for one swap is max 0,5% change for balance ReserveA or ReserveB
+DEXpair swap fee will 0,3% of quantity income Token.
+DEXpair oracle limit for one swap is max 0,5% change for balance ReserveA or ReserveB.
 
 
 ## 7. Swap DEXclient management
@@ -233,15 +233,15 @@ DEXpair oracle limit for one swap is max 0,5% change for balance ReserveA or Res
 
 ```
 You will get:
-"pairRootA": "<TIP3_RootTokenContract_address_for_TokenA>",
-"pairReserveA": "<TIP3_Wallet_DEXpair_reserve_storage_address_for_TokenA>",
-"clientDepositA": "<DEXclient_deposit_wallet_where_DEXpair_internal_owner_for_TokenA>",
-"clientAllowanceA": "0",
-"pairRootB": "<TIP3_RootTokenContract_address_for_TokenB>",
-"pairReserveB": "<TIP3_Wallet_DEXpair_reserve_storage_address_for_TokenB>",
-"clientDepositB": "<DEXclient_deposit_wallet_where_DEXpair_internal_owner_for_TokenB>",
-"clientAllowanceB": "0",
-"curPair": "<DEXpair_address>"
+- "pairRootA": "<TIP3_RootTokenContract_address_for_TokenA>",
+- "pairReserveA": "<TIP3_Wallet_DEXpair_reserve_storage_address_for_TokenA>",
+- "clientDepositA": "<DEXclient_deposit_wallet_where_DEXpair_internal_owner_for_TokenA>",
+- "clientAllowanceA": "0",
+- "pairRootB": "<TIP3_RootTokenContract_address_for_TokenB>",
+- "pairReserveB": "<TIP3_Wallet_DEXpair_reserve_storage_address_for_TokenB>",
+- "clientDepositB": "<DEXclient_deposit_wallet_where_DEXpair_internal_owner_for_TokenB>",
+- "clientAllowanceB": "0",
+- "curPair": "<DEXpair_address>"
 
 You can check your deposit wallets balances for DEXpair tokens using:
 ```
@@ -255,8 +255,8 @@ You can check your deposit wallets balances for DEXpair tokens using:
 ./tonos-cli run <DEXclient_address> getPairClientWallets '{"pairAddr":"<DEXpair_address>"}' --abi DEXclient.abi
 ```
 You will get:
-"walletA": "<DEXclient_wallet_where_DEXclient_internal_owner_for_TokenA>",
-"walletB": "<DEXclient_wallet_where_DEXclient_internal_owner_for_TokenA>",
+- "walletA": "<DEXclient_wallet_where_DEXclient_internal_owner_for_TokenA>",
+- "walletB": "<DEXclient_wallet_where_DEXclient_internal_owner_for_TokenA>",
 
 You can check your wallets balances for DEXpair tokens using:
 ```
@@ -279,8 +279,8 @@ You can check change of your wallets balances using commands from 7.1 and 7.2
 ./tonos-cli call <DEXclient_address> processSwapA '{"pairAddr":"<DEXpair_address>","qtyA":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
 ./tonos-cli call <DEXclient_address> processSwapB '{"pairAddr":"<DEXpair_address>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
 ```
-You can check change of your wallets balances using commands from 7.1 and 7.2
-You can check change of DEXpair reserves balances using commands from 6.4
+- You can check change of your wallets balances using commands from 7.1 and 7.2
+- You can check change of DEXpair reserves balances using commands from 6.4
 
 ### 7.5. Provide liquidity to DEXpairs and return
 
@@ -304,5 +304,5 @@ You can check your part of DEXpair using command:
 
 ```
 You will get
-totalSupplyDEXpair: '<total_number_of_stakes>'
-balanceDEXprovider: '<your_number_of_stakes>'
+- totalSupplyDEXpair: '<total_number_of_stakes>'
+- balanceDEXprovider: '<your_number_of_stakes>'

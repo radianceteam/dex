@@ -69,7 +69,7 @@ You need to do it only once before using the utility.
 
 A .json configuration file will be created in the TONOS-CLI utility folder. The URL of the current network will be specified there. All subsequent calls of the utility will use this file to select the network to connect to.
 
-## 3. Installing clang for TVM
+## 3. Installing TON Solidity Compiler
 
 Install TON-Solidity-Compiler from https://github.com/tonlabs/TON-Solidity-Compiler.
 

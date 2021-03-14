@@ -1,4 +1,4 @@
-# Working with DEXcore
+# Working with DEX core smart-contracts
 
 ## 1. Introduction
 

@@ -45,8 +45,8 @@ contract DEXpair is IDEXpair {
 	mapping(address => uint128) balanceReserve;
 	mapping(address => uint128) balanceReserveWallet;
 
-	// Temporay solution for storage reserve providers data.
-	// Next stage this storage migrate to accounting using TIP3 token as proof of stake.
+	// This is a temporary solution for storage of a ledger of liquidity providers stakes.
+ // In the next stage it will be implemented using pair TIP-3 wallets, similar to Uniswap as proof of stake
 	mapping(address => uint128) reserveProviders;
 	uint128 totalSupply;
 
@@ -697,8 +697,7 @@ contract DEXpair is IDEXpair {
 	}
 
 	// Callback function from client deposit walletA to swap A to B
-	// maxexchange is temporary solution for linear oracle control swap. Max change rate for one swap 0,5 %
-	function swapA(uint128 value0) public alwaysAccept override functionID(0x00000056){
+  // variable maxexchange is a temporary solution for linear swap amount control. Max allowed rate change for one swap is 0.5% of current rate.
 		address clientWalletA = msg.sender;
 		address dexclient = processRouter[clientWalletA];
 		Client cc = dexpairclients[dexclient];
@@ -759,7 +758,7 @@ contract DEXpair is IDEXpair {
 	}
 
 	// Callback function from client deposit walletA to swap B to A
-	// maxexchange is temporary solution for linear oracle control swap. Max change rate for one swap 0,5 %
+	// variable maxexchange is a temporary solution for linear swap amount control. Max allowed rate change for one swap is 0.5% of current rate.
 	function swapB(uint128 value0) public alwaysAccept override functionID(0x00000066){
 		address clientWalletB = msg.sender;
 		address dexclient = processRouter[clientWalletB];

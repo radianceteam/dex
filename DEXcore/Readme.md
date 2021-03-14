@@ -323,42 +323,109 @@ node deployDEXclient.js
 * `const tongrams = 100000000000;` - tongrams qty which giver transfer to <DEXclient_address> before deploy.
 
 ### 8.3. Connect to DEXpairs
-<!-- ```
-./tonos-cli call <DEXclient_address> makeAdepositToPair '{"pairAddr":"<DEXpair_address>","qtyA":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
-./tonos-cli call <DEXclient_address> makeBdepositToPair '{"pairAddr":"<DEXpair_address>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
-./tonos-cli call <DEXclient_address> returnDepositFromPair '{"pairAddr":"<DEXpair_address>"}' --sign deploy.keys.json --abi DEXclient.abi
 ```
-You can check change of your wallets balances using commands from 7.1 and 7.2
+node connectTONxUSDT.js
+node connectTONxBTC.js
+node connectTONxETH.js
+node connectBTCxUSDT.js
+node connectETHxUSDT.js
+```
+You can check DEXclient connection to DEXpair using commands:
+```
+node showTONUSDT.js
+node showTONBTC.js
+node showTONETH.js
+node showBTCUSDT.js
+node showETHUSDT.js
+```
+You can check DEXpair using commands:
+```
+node pairTONUSDT.js
+node pairTONBTC.js
+node pairTONETH.js
+node pairBTCUSDT.js
+node pairETHUSDT.js
+```
+### 8.4. Wrap TON to wTON and unwrap
+You can wrap some of your TON using script:
+```
+node wrap.js
+```
+* `const qtyTONgrams = 50000000000;` - set here qty TON grams for wrap
 
-### 7.4. Swaps 'A to B' and 'B to A'
-```
-./tonos-cli call <DEXclient_address> processSwapA '{"pairAddr":"<DEXpair_address>","qtyA":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
-./tonos-cli call <DEXclient_address> processSwapB '{"pairAddr":"<DEXpair_address>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
-```
-- You can check change of your wallets balances using commands from 7.1 and 7.2
-- You can check change of DEXpair reserves balances using commands from 6.4
+- You can check change of  wallets balances using commands from 8.3
 
-### 7.5. Provide liquidity to DEXpairs and return
+You can unwrap all your wTON using script:
+```
+node unwrap.js
+```
+
+### 8.5. Deposit tokenA or tokenB
+
+```
+node depositA.js
+node depositB.js
+
+```
+* `const pathJsonPair = './DEXpairContractTONxUSDT.json';` - select working DEXpair
+* `const qtyTokens = 3000000000;` - set here qty nanoTokens for deposit
+
+- You can check change of  wallets balances using commands from 8.3
+
+You can return all your deposits from DEXpair using script:
+```
+node returnDeposit.js
+```
+* `const pathJsonPair = './DEXpairContractTONxUSDT.json';` - select working DEXpair
+
+### 8.5. Swap tokenA or tokenB
+
+```
+node swapA.js
+node swapB.js
+
+```
+* `const pathJsonPair = './DEXpairContractTONxUSDT.json';` - select working DEXpair
+* `const qtyToken = 1000000000;` - set here qty nanoTokens for swap
+
+- You can check change of  wallets balances using scrip from 8.3
+
+### 8.6. Provide liquidity to DEXpairs and return
 
 If you want to became shareholder of DEXpair and will get part of DEXpair profit you need provide some liquidity to DEXpair.
 You should collect both DEXpair tokens on your wallets using swap.
 Any time you can returm your part of DEXpair reserves balances.
 
+- First add deposit:
 ```
-./tonos-cli call <DEXclient_address> makeABdepositToPair '{"pairAddr":"<DEXpair_address>","qtyA":"<set_quantity_nanoTokens>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
-./tonos-cli call <DEXclient_address> processLiquidity '{"pairAddr":"<DEXpair_address>","qtyB":"<set_quantity_nanoTokens>","qtyB":"<set_quantity_nanoTokens>"}' --sign deploy.keys.json --abi DEXclient.abi
-./tonos-cli call <DEXclient_address> returnAllLiquidity '{"pairAddr":"<DEXpair_address>"}' --sign deploy.keys.json --abi DEXclient.abi
+node depositAB.js
 
 ```
-You can check change of your wallets balances using commands from 7.1 and 7.2
-You can check change of DEXpair reserves balances using commands from 6.4
-You can check your part of DEXpair using command:
+* `const pathJsonPair = './DEXpairContractTONxUSDT.json';` - select working DEXpair
+* `const qtyTokenA = <quantity in nanoTokens>;` - set here qtyA nanoTokens for deposit
+* `const qtyTokenB = <quantity in nanoTokens>;` - set here qtyB nanoTokens for deposit
+
+- Second provide Liquidity:
+```
+node provide.js
 
 ```
-./tonos-cli run <DEXpair_address> getShareReserveProvider '{"providerAddr":"<DEXclient_address>"}' --abi DEXpair.abi.json
-./tonos-cli run <DEXpair_address> getTotalSupply '{}' --abi DEXpair.abi.json
+* `const pathJsonPair = './DEXpairContractTONxUSDT.json';` - select working DEXpair
+* `const qtyTokenA = <quantity in nanoTokens>;` - set here qtyA nanoTokens for provide
+* `const qtyTokenB = <quantity in nanoTokens>;` - set here qtyB nanoTokens for provide
+
+- You can check result using script for specified pair:
+```
+node pairTONUSDT.js
+node pairTONBTC.js
+node pairTONETH.js
+node pairBTCUSDT.js
+node pairETHUSDT.js
 
 ```
-You will get
-- totalSupplyDEXpair: '<total_number_of_stakes>'
-- balanceDEXprovider: '<your_number_of_stakes>' -->
+- You can return all your provided liquidity using script:
+```
+node returnLiquidity.js
+
+```
+* `const pathJsonPair = './DEXpairContractTONxUSDT.json';` - select working DEXpair

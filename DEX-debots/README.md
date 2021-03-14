@@ -68,15 +68,23 @@ tonos-cli debot fetch <debot_address>
 
 6. After you have deployed a new client wallet wait a few seconds, refresh your client wallet data and display it
 
+7. Copy your wallet address and fill it up with TONs. Required amount is around 20 TONs
+
+8. Check your balance again, when you have enough TONs, you can create a wallet for wTONs using debot menu command and wrap your TONs into TIP-3 tokens for future use in other DEX debots
 
 
-
-
-
-
+After this you can launch Swapper Debot and Liquidity Provider Debot and follow the instructions to operate the DEX. Below is the list of debot addresses and pair addresses for trading. You can connect each pair inside the debot interface and start trading using available liquidity. Note that 1 nanoToken = 0,000 000 001 wTON/wBTC/wETH/wUSDT.
 
 Debots:
 
+TONwrapperDebot
+tonos-cli debot fetch 0:35980ae219f15a716e9a0e5562c5c3ec9029adddb6fcb221f2aa6f64a8c38aa4
+
+Swapper
+tonos-cli debot fetch 0:dbc0f2367ab70fb845c44e596ee1b061bae15562f937768f6c7c27edef139a22
+
+Liquidity Provider
+tonos-cli debot fetch 0:08b76ddf6c8e3d8b4f6e7f57c1eec01c65b9e3e2d6f82edb113dac82b2100e81
 
 
 PAIRS for debot:

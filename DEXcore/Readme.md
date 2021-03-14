@@ -140,7 +140,7 @@ Verify that state matches parameters you have provided during deploy.
 ./tonos-cli run <DEXclient_address> getAddressWTON {} --abi DEXclient.abi
 ```
 
-`getAddressWTON` give you DEXclient_wTon_address of your DEXclient for wrapp your TON to wTON:
+`getAddressWTON` give you <DEXclient_wTon_address> of your DEXclient for wrapp your TON to wTON:
 ```
 ./tonos-cli run <DEXclient_wTon_address> getBalance {} --abi TONTokenWallet.abi
 
@@ -170,7 +170,7 @@ Configuration parameters:
 
 ```
 Configuration parameters:
-* `qtyTONgrams` - quantity TONgrams which you want to wrap.
+* `qtyTONgrams` - quantity TON grams which you want to wrap.
 
 You can check wTON balance using comand:
 ```
@@ -209,8 +209,8 @@ You can check current DEXpair balance ReserveA and ReserveB  using command.
 
 ```
 You will get
-- "balanceReserveA": "<quantity in nanoTokens>",
-- "balanceReserveB": "<quantity in nanoTokens>"
+- "balanceReserveA": "<nanoTokens_quantity>"
+- "balanceReserveB": "<nanoTokens_quantity>"
 
 where nanoToken rate:
 - 1 nanoToken = 0,000 000 001 wTON

@@ -27,39 +27,6 @@
 			]
 		},
 		{
-			"name": "deployDexClient",
-			"inputs": [
-				{"name":"index","type":"uint32"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "deployDexClientRequest",
-			"inputs": [
-				{"name":"value","type":"uint256"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "deployError",
-			"inputs": [
-				{"name":"sdkError","type":"uint32"},
-				{"name":"exitCode","type":"uint32"}
-			],
-			"outputs": [
-			]
-		},
-		{
-			"name": "setWalletAddressAfterDeploy",
-			"inputs": [
-				{"name":"newAddress","type":"address"}
-			],
-			"outputs": [
-			]
-		},
-		{
 			"name": "selectWallet",
 			"inputs": [
 				{"name":"index","type":"uint32"}

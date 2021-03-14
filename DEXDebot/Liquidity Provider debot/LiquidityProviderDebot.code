@@ -166,17 +166,11 @@ ENDS
 ; function start
 NEWC
 ENDC
-PUSHSLICE x97374
-PUSHSLICE x57656c636f6d6520746f2052616469616e636520444558204c69717569646974792050726f7669646572206465626f7420696e746572666163652e204865726520796f752063616e206372656174652061206e6577206d756c74692d54495033206163636f756e74206f72206c6f6720696e746f20796f75722065786
+PUSHSLICE x57656c636f6d6520746f2052616469616e636520444558204c69717569646974792050726f7669646572206465626f7420696e746572666163652e
 NEWC
 STSLICE
-STSLICE
-PUSHSLICE x696e67206163636f756e742e
-NEWC
-STSLICE
-STBREFR
 ENDC
-PUSHINT 3
+PUSHINT 2
 NEWDICT
 PUSHSLICE x4c6f6720696e746f20796f7572206578697374696e6720636c69656e742077616c6c6574
 NEWC
@@ -200,28 +194,6 @@ PUSHINT 0
 ROT
 PUSHINT 32
 DICTUSETB
-PUSHSLICE x4372656174652061206e657720444558265449502d3320636c69656e742077616c6c6574
-NEWC
-STSLICE
-ENDC
-NEWC
-ENDC
-PUSHINT 797761388
-TUPLE 3
-UNTUPLE 3
-NEWC
-PUSH S3
-STREFR
-PUSH S2
-STREFR
-PUSH S1
-STUR 32
-XCHG s3
-BLKDROP 3
-PUSHINT 1
-ROT
-PUSHINT 32
-DICTUSETB
 PUSHSLICE x45786974
 NEWC
 STSLICE
@@ -240,7 +212,7 @@ PUSH S1
 STUR 32
 XCHG s3
 BLKDROP 3
-PUSHINT 2
+PUSHINT 1
 ROT
 PUSHINT 32
 DICTUSETB
@@ -258,17 +230,11 @@ SETGLOB 7
 ; function start
 NEWC
 ENDC
-PUSHSLICE x97374
-PUSHSLICE x57656c636f6d6520746f2052616469616e636520444558204c69717569646974792050726f7669646572206465626f7420696e746572666163652e204865726520796f752063616e206372656174652061206e6577206d756c74692d54495033206163636f756e74206f72206c6f6720696e746f20796f75722065786
+PUSHSLICE x57656c636f6d6520746f2052616469616e636520444558204c69717569646974792050726f7669646572206465626f7420696e746572666163652e
 NEWC
 STSLICE
-STSLICE
-PUSHSLICE x696e67206163636f756e742e
-NEWC
-STSLICE
-STBREFR
 ENDC
-PUSHINT 3
+PUSHINT 2
 NEWDICT
 PUSHSLICE x4c6f6720696e746f20796f7572206578697374696e6720636c69656e742077616c6c6574
 NEWC
@@ -292,28 +258,6 @@ PUSHINT 0
 ROT
 PUSHINT 32
 DICTUSETB
-PUSHSLICE x4372656174652061206e657720444558265449502d3320636c69656e742077616c6c6574
-NEWC
-STSLICE
-ENDC
-NEWC
-ENDC
-PUSHINT 797761388
-TUPLE 3
-UNTUPLE 3
-NEWC
-PUSH S3
-STREFR
-PUSH S2
-STREFR
-PUSH S1
-STUR 32
-XCHG s3
-BLKDROP 3
-PUSHINT 1
-ROT
-PUSHINT 32
-DICTUSETB
 PUSHSLICE x45786974
 NEWC
 STSLICE
@@ -332,373 +276,13 @@ PUSH S1
 STUR 32
 XCHG s3
 BLKDROP 3
-PUSHINT 2
+PUSHINT 1
 ROT
 PUSHINT 32
 DICTUSETB
 PAIR
 CALL $Menu_no_obj_select$
 ; end function start
-
-.globl	deployDexClient
-.public	deployDexClient
-.type	deployDexClient, @function
-GETGLOB 1
-ISNULL
-IFREF {
-	CALL $c4_to_c7$
-}
-; Decode input parameters
-; Decode index
-LDU 32
-ENDS
-;; param: index
-; function deployDexClient
-PUSHINT 103354436
-PUSHSLICE x47656e65726174652061206e6577207075626b657920262073657420696e20307820666f726d6174
-NEWC
-STSLICE
-ENDC
-CALL $Terminal_no_obj_inputUint$
-DROP
-; end function deployDexClient
-CALLREF {
-	CALL $c7_to_c4$
-}
-TRUE
-SETGLOB 7
-
-.globl	deployDexClient_internal
-.type	deployDexClient_internal, @function
-;; param: index
-; function deployDexClient
-PUSHINT 103354436
-PUSHSLICE x47656e65726174652061206e6577207075626b657920262073657420696e20307820666f726d6174
-NEWC
-STSLICE
-ENDC
-CALL $Terminal_no_obj_inputUint$
-DROP
-; end function deployDexClient
-
-.globl	deployDexClientRequest
-.public	deployDexClientRequest
-.type	deployDexClientRequest, @function
-GETGLOB 1
-ISNULL
-IFREF {
-	CALL $c4_to_c7$
-}
-; Decode input parameters
-; Decode value
-LDUQ 256
-PUSHCONT {
-	;; load next cell
-	LDREF
-	ENDS
-	CTOS
-	LDU 256
-}
-IFNOT
-ENDS
-;; param: value
-; modifier alwaysAccept
-ACCEPT
-; function deployDexClientRequest
-;; push identifier value
-DUP
-;; decl: val
-NULL
-;; decl: pubkey
-;; Remote call IDEXroot.deployNewDexClient
-;; push identifier m_DexRootAddress
-GETGLOB 19
-NEWC
-STSLICECONST x497_
-PUSHINT 7781618
-STUR 32
-PUSHINT 1944466672
-STUR 32
-PUSHINT 2
-STUR 8
-STONE
-STONE
-STONE
-NEWC
-STSLICECONST xa_
-STB
-STSLICE
-PUSHINT 4
-STZEROES
-STSLICECONST 0
-STSLICECONST 1
-NEWC
-STSLICECONST 1
-PUSHINT 512
-STZEROES
-;; push identifier pubkey
-PUSH S2
-ISNULL
-PUSHCONT {
-	STSLICECONST 0
-}
-PUSHCONT {
-	STSLICECONST 1
-	;; push identifier pubkey
-	PUSH S2
-	STUR 256
-}
-IFELSE
-;; push identifier now
-NOW
-;; uint64
-STUR 64
-PUSHINT 291
-STUR 32
-STSLICECONST x120f04d7
-NEWC
-;; pubkey
-;; push identifier val
-PUSH S4
-STUR 256
-STBREFR
-STBREFR
-ENDC
-PUSHINT 1
-SENDRAWMSG
-DROP2
-; end function deployDexClientRequest
-DROP
-; end modifier alwaysAccept
-IFREF {
-	CALL $c7_to_c4$
-}
-TRUE
-SETGLOB 7
-
-.globl	deployDexClientRequest_internal
-.type	deployDexClientRequest_internal, @function
-;; param: value
-; modifier alwaysAccept
-ACCEPT
-; function deployDexClientRequest
-;; push identifier value
-DUP
-;; decl: val
-NULL
-;; decl: pubkey
-;; Remote call IDEXroot.deployNewDexClient
-;; push identifier m_DexRootAddress
-GETGLOB 19
-NEWC
-STSLICECONST x497_
-PUSHINT 7781618
-STUR 32
-PUSHINT 1944466672
-STUR 32
-PUSHINT 2
-STUR 8
-STONE
-STONE
-STONE
-NEWC
-STSLICECONST xa_
-STB
-STSLICE
-PUSHINT 4
-STZEROES
-STSLICECONST 0
-STSLICECONST 1
-NEWC
-STSLICECONST 1
-PUSHINT 512
-STZEROES
-;; push identifier pubkey
-PUSH S2
-ISNULL
-PUSHCONT {
-	STSLICECONST 0
-}
-PUSHCONT {
-	STSLICECONST 1
-	;; push identifier pubkey
-	PUSH S2
-	STUR 256
-}
-IFELSE
-;; push identifier now
-NOW
-;; uint64
-STUR 64
-PUSHINT 291
-STUR 32
-STSLICECONST x120f04d7
-NEWC
-;; pubkey
-;; push identifier val
-PUSH S4
-STUR 256
-STBREFR
-STBREFR
-ENDC
-PUSHINT 1
-SENDRAWMSG
-DROP2
-; end function deployDexClientRequest
-DROP
-; end modifier alwaysAccept
-
-.globl	deployError
-.public	deployError
-.type	deployError, @function
-GETGLOB 1
-ISNULL
-IFREF {
-	CALL $c4_to_c7$
-}
-; Decode input parameters
-; Decode sdkError
-LDU 32
-; Decode exitCode
-LDU 32
-ENDS
-;; param: sdkError
-;; param: exitCode
-; function deployError
-PUSHINT 0
-NEWC
-NULL
-TUPLE 2
-NEWC
-PUSHSLICE x73646b4572726f723a20
-CALL $storeStringInBuilders$
-CALL $appendToList$
-;; push identifier sdkError
-PUSH S4
-PUSHINT 0
-FALSE
-FALSE
-CALL $convertIntToDecStr$
-CALL $appendToList$
-PUSHSLICE x0a65786974434f64653a
-CALL $storeStringInBuilders$
-CALL $appendToList$
-;; push identifier exitCode
-PUSH S3
-PUSHINT 0
-FALSE
-FALSE
-CALL $convertIntToDecStr$
-CALL $appendToList$
-CALL $assembleList$
-CALL $Terminal_no_obj_print$
-CALL $start_internal$
-DROP2
-; end function deployError
-CALLREF {
-	CALL $c7_to_c4$
-}
-TRUE
-SETGLOB 7
-
-.globl	deployError_internal
-.type	deployError_internal, @function
-;; param: sdkError
-;; param: exitCode
-; function deployError
-PUSHINT 0
-NEWC
-NULL
-TUPLE 2
-NEWC
-PUSHSLICE x73646b4572726f723a20
-CALL $storeStringInBuilders$
-CALL $appendToList$
-;; push identifier sdkError
-PUSH S4
-PUSHINT 0
-FALSE
-FALSE
-CALL $convertIntToDecStr$
-CALL $appendToList$
-PUSHSLICE x0a65786974434f64653a
-CALL $storeStringInBuilders$
-CALL $appendToList$
-;; push identifier exitCode
-PUSH S3
-PUSHINT 0
-FALSE
-FALSE
-CALL $convertIntToDecStr$
-CALL $appendToList$
-CALL $assembleList$
-CALL $Terminal_no_obj_print$
-CALL $start_internal$
-DROP2
-; end function deployError
-
-.globl	setWalletAddressAfterDeploy
-.public	setWalletAddressAfterDeploy
-.type	setWalletAddressAfterDeploy, @function
-GETGLOB 1
-ISNULL
-IFREF {
-	CALL $c4_to_c7$
-}
-; Decode input parameters
-; Decode newAddress
-LDMSGADDRQ
-PUSHCONT {
-	;; load next cell
-	LDREF
-	ENDS
-	CTOS
-	LDMSGADDR
-}
-IFNOT
-ENDS
-;; param: newAddress
-; function setWalletAddressAfterDeploy
-; expValue
-; end expValue
-;; push identifier newAddress
-DUP
-; colValue
-SETGLOB 16
-; end colValue
-PUSHINT 842683031
-PUSHSLICE x436c69656e74206164647265737320736d6172742d636f6e747261637420636f6d706c6574652e2e2e
-NEWC
-STSLICE
-ENDC
-CALL $Terminal_no_obj_print$
-DROP
-; end function setWalletAddressAfterDeploy
-CALLREF {
-	CALL $c7_to_c4$
-}
-TRUE
-SETGLOB 7
-
-.globl	setWalletAddressAfterDeploy_internal
-.type	setWalletAddressAfterDeploy_internal, @function
-;; param: newAddress
-; function setWalletAddressAfterDeploy
-; expValue
-; end expValue
-;; push identifier newAddress
-DUP
-; colValue
-SETGLOB 16
-; end colValue
-PUSHINT 842683031
-PUSHSLICE x436c69656e74206164647265737320736d6172742d636f6e747261637420636f6d706c6574652e2e2e
-NEWC
-STSLICE
-ENDC
-CALL $Terminal_no_obj_print$
-DROP
-; end function setWalletAddressAfterDeploy
 
 .globl	selectWallet
 .public	selectWallet
@@ -9268,6 +8852,62 @@ PUSHCONT {
 }
 IF
 
+.globl	AddressInput_with_obj_select
+.type	AddressInput_with_obj_select, @function
+;; param: answerId
+; function select
+;; address.makeAddrStd()
+PUSHSLICE x9c3afda37b1cc4610e222de8a45cb1be15278aa418ade95bc47de7b12335308ca77_
+;; decl: addr
+;; Remote call IAddressInput.select
+;; push identifier addr
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x20cde9b8
+;; answerId
+;; push identifier answerId
+PUSH S2
+STUR 32
+ENDC
+PUSHINT 1
+SENDRAWMSG
+DROP
+; end function select
+
+.globl	AddressInput_no_obj_select
+.type	AddressInput_no_obj_select, @function
+;; param: answerId
+; function select
+;; address.makeAddrStd()
+PUSHSLICE x9c3afda37b1cc4610e222de8a45cb1be15278aa418ade95bc47de7b12335308ca77_
+;; decl: addr
+;; Remote call IAddressInput.select
+;; push identifier addr
+DUP
+NEWC
+STSLICECONST x62_
+STSLICE
+PUSHSLICE x3989680000000000000000000000000004_
+STSLICER
+STSLICECONST 0
+STSLICECONST 0
+STSLICECONST x20cde9b8
+;; answerId
+;; push identifier answerId
+PUSH S2
+STUR 32
+ENDC
+PUSHINT 1
+SENDRAWMSG
+DROP2
+; end function select
+
 .globl	Menu_with_obj_select
 .type	Menu_with_obj_select, @function
 ;; param: title
@@ -9613,60 +9253,4 @@ PUSHINT 1
 SENDRAWMSG
 BLKDROP 3
 ; end function print
-
-.globl	AddressInput_with_obj_select
-.type	AddressInput_with_obj_select, @function
-;; param: answerId
-; function select
-;; address.makeAddrStd()
-PUSHSLICE x9c3afda37b1cc4610e222de8a45cb1be15278aa418ade95bc47de7b12335308ca77_
-;; decl: addr
-;; Remote call IAddressInput.select
-;; push identifier addr
-DUP
-NEWC
-STSLICECONST x62_
-STSLICE
-PUSHSLICE x3989680000000000000000000000000004_
-STSLICER
-STSLICECONST 0
-STSLICECONST 0
-STSLICECONST x20cde9b8
-;; answerId
-;; push identifier answerId
-PUSH S2
-STUR 32
-ENDC
-PUSHINT 1
-SENDRAWMSG
-DROP
-; end function select
-
-.globl	AddressInput_no_obj_select
-.type	AddressInput_no_obj_select, @function
-;; param: answerId
-; function select
-;; address.makeAddrStd()
-PUSHSLICE x9c3afda37b1cc4610e222de8a45cb1be15278aa418ade95bc47de7b12335308ca77_
-;; decl: addr
-;; Remote call IAddressInput.select
-;; push identifier addr
-DUP
-NEWC
-STSLICECONST x62_
-STSLICE
-PUSHSLICE x3989680000000000000000000000000004_
-STSLICER
-STSLICECONST 0
-STSLICECONST 0
-STSLICECONST x20cde9b8
-;; answerId
-;; push identifier answerId
-PUSH S2
-STUR 32
-ENDC
-PUSHINT 1
-SENDRAWMSG
-DROP2
-; end function select
 

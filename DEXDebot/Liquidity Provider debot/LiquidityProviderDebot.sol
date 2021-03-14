@@ -3,11 +3,11 @@ pragma AbiHeader expire;
 pragma AbiHeader time;
 pragma AbiHeader pubkey;
 
-import "../Debot.sol";
-import "../Terminal.sol";
-import "../AddressInput.sol";
-import "../Sdk.sol";
-import "../Menu.sol";
+import "./Debot.sol";
+import "./Terminal.sol";
+import "./AddressInput.sol";
+import "./Sdk.sol";
+import "./Menu.sol";
 
 interface ITONTokenWallet {
     function getName() external functionID(0x000000011) returns (bytes value0);
@@ -89,41 +89,12 @@ contract DEXDebot is Debot {
         m_options |= DEBOT_ABI;
     }
     function start() public override {
-        Menu.select("", "Welcome to Radiance DEX Liquidity Provider debot interface. Here you can create a new multi-TIP3 account or log into your existing account.", [
+        Menu.select("", "Welcome to Radiance DEX Liquidity Provider debot interface.", [
             MenuItem("Log into your existing client wallet", "", tvm.functionId(selectWallet)),
-            MenuItem("Create a new DEX&TIP-3 client wallet", "", tvm.functionId(deployDexClient)),
             MenuItem("Exit", "", 0)
             ]);
     }
-/*
-    deploy new client
-*/
-    function deployDexClient(uint32 index) public {
-        Terminal.inputUint(tvm.functionId(deployDexClientRequest), "Generate a new pubkey & set in 0x format");
-    }
-    function deployDexClientRequest(uint256 value) public alwaysAccept view {
-        uint256 val = value;
-        optional(uint256) pubkey;
-        IDEXroot(m_DexRootAddress).deployNewDexClient{
-        abiVer : 2,
-        extMsg : true,
-        sign : true,
-        pubkey : pubkey,
-        time : uint64(now),
-        expire: 0x123,
-        callbackId : tvm.functionId(setWalletAddressAfterDeploy),
-        onErrorId : tvm.functionId(deployError)
-        }(val);
-    }
-    function deployError(uint32 sdkError, uint32 exitCode) public {
-        Terminal.print(0, format("sdkError: {}\nexitCOde:{}", sdkError, exitCode));
-        start();
-    }
 
-    function setWalletAddressAfterDeploy(address newAddress) public {
-        m_Client = newAddress;
-        Terminal.print(tvm.functionId(mainmenu), "Client address smart-contract complete...");
-    }
     /*
         set wallet address
     */

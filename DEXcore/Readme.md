@@ -189,7 +189,7 @@ You can unwrap back all your wTON to TON using comand:
 ```
 ### 6.4. DEX preset configuration (deployed on net.ton.dev)
 
-TIP3 RootTokenContract.cpp(https://github.com/tonlabs/ton-labs-contracts/pull/60)
+This DEX implementation uses a slightly modified TON Labs TIP-3  RootTokenContract.cpp (https://github.com/radianceteam/dex/blob/main/DEXrootAndWalletcompile/RootTokenContract.cpp). It was modified to allow for deployment of wallets of the same type with different addresses for one internal owner. Pull-request to TONLabs TIP-3: https://github.com/tonlabs/ton-labs-contracts/pull/60 (preliminary confirmed by Mitja on SG call).
 
 - wTON 0:bc865dc0b225ec75e158a2e3f862ce6a2398f733930de3fc626643dfdacfb798
 - wUSDT 0:b7b17288b1e1c1166797fc40f6329aa598ef720176738769f79fa49c87f50feb

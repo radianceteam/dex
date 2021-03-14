@@ -1,9 +1,0 @@
-{
-  "dependencies": {
-    "@tonclient/core": "^1.5.3",
-    "@tonclient/lib-node": "^1.5.3",
-    "ascii-hex": "^1.0.1",
-    "hex2dec": "^1.1.2",
-    "sudo-js": "^1.0.2"
-  }
-}

@@ -13,8 +13,8 @@ $ npm install
 
 $ node deployingTokenRoot.js [nameRootToken] [symbolRootToken] [decimals] [total_supply] [root_owner]
 
-* nameRootToken   = default [number];
-* symbolRootToken = default [number +'symbol'];
+* nameRootToken   = default [HEX_number];
+* symbolRootToken = default [HEX_number +'symbol'];
 * decimals        = default [0];
 * total_supply    = default [1000];
 * root_owner      = default [0];

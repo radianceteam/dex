@@ -1,13 +1,15 @@
-pragma solidity >= 0.6.0;
+pragma ton-solidity >=0.36.0;
 pragma AbiHeader expire;
+pragma AbiHeader time;
+pragma AbiHeader pubkey;
 
 interface IRootTokenContract {
-	function deployEmptyWallet(uint32 _answer_id, int8 workchain_id, uint256 pubkey, uint256 internal_owner, uint128 grams) external functionID(0x0000000d) returns (address value0);
+	function deployEmptyWallet(int8 workchain_id, uint256 pubkey, uint256 internal_owner, uint128 grams) external functionID(0x0000000d) returns (address value0);
 }
 
 interface ITONTokenWallet {
 	function transfer(address dest, uint128 tokens, uint128 grams) external functionID(0x0000000c);
-	function getBalance_InternalOwner(uint32 _answer_id) external functionID(0x0000000d) returns (uint128 value0);
+	function getBalance_InternalOwner() external functionID(0x0000000d) returns (uint128 value0);
 }
 
 interface IDEXclient {
@@ -45,8 +47,8 @@ contract DEXpair is IDEXpair {
 	mapping(address => uint128) balanceReserve;
 	mapping(address => uint128) balanceReserveWallet;
 
-	// This is a temporary solution for storage of a ledger of liquidity providers stakes.
- // In the next stage it will be implemented using pair TIP-3 wallets, similar to Uniswap as proof of stake
+	// Temporay solution for storage reserve providers data.
+	// Next stage this storage migrate to accounting using TIP3 token as proof of stake.
 	mapping(address => uint128) reserveProviders;
 	uint128 totalSupply;
 
@@ -162,7 +164,7 @@ contract DEXpair is IDEXpair {
 		address creator = rootAddr;
 		address owner = address(this);
 		uint256 ownerUINT = owner.value;
-		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000a, 0, walletId, ownerUINT, GRAMS_CREATE_NEWWALLET);
+		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, setPairDepositWallet, 0, walletId, ownerUINT, GRAMS_CREATE_NEWWALLET);
 		creator.transfer({value:GRAMS_CREATE_ROOT, bounce:false, body:body});
 		createStatus = true;
 	}
@@ -227,8 +229,8 @@ contract DEXpair is IDEXpair {
 	function askBalancePairWallets() public view checkOwnerAndAccept {
 		address transmitterA = reserveA;
 		address transmitterB = reserveB;
-		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(transmitterA).getBalance_InternalOwner, 0x00000006);
-		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(transmitterB).getBalance_InternalOwner, 0x00000006);
+		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(transmitterA).getBalance_InternalOwner, setWalletBalance);
+		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(transmitterB).getBalance_InternalOwner, setWalletBalance);
 		transmitterA.transfer({value:20000000, body:bodyA});
 		transmitterB.transfer({value:20000000, body:bodyB});
 	}
@@ -338,7 +340,7 @@ contract DEXpair is IDEXpair {
 		address creator = rootAddr;
 		address owner = address(this);
 		uint256 ownerUINT = owner.value;
-		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, 0x0000000b, 0, 0, ownerUINT, GRAMS_CREATERESERVEWALLET_NEWWALLET);
+		TvmCell body = tvm.encodeBody(IRootTokenContract(creator).deployEmptyWallet, setPairReserveWallet, 0, 0, ownerUINT, GRAMS_CREATERESERVEWALLET_NEWWALLET);
 		creator.transfer({value:GRAMS_CREATERESERVEWALLET_ROOT, bounce:false, body:body});
 		createStatus = true;
 	}
@@ -413,13 +415,13 @@ contract DEXpair is IDEXpair {
 
 	// Function to ask DEX client deposit TIP3 walletA about balance
 	function requestClientBalanceA(address tip3wallet) private pure inline {
-		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(tip3wallet).getBalance_InternalOwner, 0x00000016);
+		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(tip3wallet).getBalance_InternalOwner, responceClientBalanceA);
 		tip3wallet.transfer({value:GRAMS_CHECK_BALANCE, body:bodyA});
 	}
 
 	// Function to ask DEX client deposit TIP3 walletB about balance
 	function requestClientBalanceB(address tip3wallet) private pure inline {
-		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(tip3wallet).getBalance_InternalOwner, 0x00000026);
+		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(tip3wallet).getBalance_InternalOwner, responceClientBalanceB);
 		tip3wallet.transfer({value:GRAMS_CHECK_BALANCE, body:bodyB});
 	}
 
@@ -606,9 +608,9 @@ contract DEXpair is IDEXpair {
 		cc.qtyB = 0;
 		cc.returnAddrA = returnAddrA;
 		cc.returnAddrB = returnAddrB;
-		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(cc.walletA).getBalance_InternalOwner, 0x00000036);
+		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(cc.walletA).getBalance_InternalOwner, returnClientDepositA);
 		cc.walletA.transfer({value:GRAMS_CHECK_BALANCE, body:bodyA});
-		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(cc.walletB).getBalance_InternalOwner, 0x00000046);
+		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(cc.walletB).getBalance_InternalOwner, returnClientDepositB);
 		cc.walletB.transfer({value:GRAMS_CHECK_BALANCE, body:bodyB});
 		processRouter[cc.walletA] = dexclient;
 		processRouter[cc.walletB] = dexclient;
@@ -690,14 +692,15 @@ contract DEXpair is IDEXpair {
 		cc.qtyB = 0;
 		cc.returnAddrA = returnAddrA;
 		cc.returnAddrB = returnAddrB;
-		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(cc.walletA).getBalance_InternalOwner, 0x00000056);
+		TvmCell bodyA = tvm.encodeBody(ITONTokenWallet(cc.walletA).getBalance_InternalOwner, swapA);
 		cc.walletA.transfer({value:GRAMS_CHECK_BALANCE, body:bodyA});
 		processRouter[cc.walletA] = dexclient;
 		dexpairclients[dexclient] = cc;
 	}
 
 	// Callback function from client deposit walletA to swap A to B
-  // variable maxexchange is a temporary solution for linear swap amount control. Max allowed rate change for one swap is 0.5% of current rate.
+	// maxexchange is temporary solution for linear oracle control swap. Max change rate for one swap 0,5 %
+	function swapA(uint128 value0) public alwaysAccept override functionID(0x00000056){
 		address clientWalletA = msg.sender;
 		address dexclient = processRouter[clientWalletA];
 		Client cc = dexpairclients[dexclient];
@@ -751,14 +754,14 @@ contract DEXpair is IDEXpair {
 		cc.qtyA = 0;
 		cc.returnAddrA = returnAddrA;
 		cc.returnAddrB = returnAddrB;
-		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(cc.walletB).getBalance_InternalOwner, 0x00000066);
+		TvmCell bodyB = tvm.encodeBody(ITONTokenWallet(cc.walletB).getBalance_InternalOwner, swapB);
 		cc.walletB.transfer({value:GRAMS_CHECK_BALANCE, body:bodyB});
 		processRouter[cc.walletB] = dexclient;
 		dexpairclients[dexclient] = cc;
 	}
 
 	// Callback function from client deposit walletA to swap B to A
-	// variable maxexchange is a temporary solution for linear swap amount control. Max allowed rate change for one swap is 0.5% of current rate.
+	// maxexchange is temporary solution for linear oracle control swap. Max change rate for one swap 0,5 %
 	function swapB(uint128 value0) public alwaysAccept override functionID(0x00000066){
 		address clientWalletB = msg.sender;
 		address dexclient = processRouter[clientWalletB];
@@ -821,11 +824,6 @@ contract DEXpair is IDEXpair {
 		}
 	}
 
-	// Function to get balance TONgrams for DEX pair.
-	function getBalanceTONgrams() public pure alwaysAccept returns (uint128 balanceTONgrams){
-		return address(this).balance;
-	}
-
 	// Dev function to reset DEXclient processStatus. Only by owner
 	// function resetStatus(address dexclient) public checkOwnerAndAccept returns (bool){
 	// 	Client cc = dexpairclients[dexclient];
@@ -836,5 +834,10 @@ contract DEXpair is IDEXpair {
 	// 	dexpairclients[dexclient] = cc;
 	// 	return status;
 	// }
+
+	// Function to get balance TONgrams for DEX pair.
+	function getBalanceTONgrams() public pure alwaysAccept returns (uint128 balanceTONgrams){
+		return address(this).balance;
+	}
 
 }
